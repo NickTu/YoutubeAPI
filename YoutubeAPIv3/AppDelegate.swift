@@ -8,11 +8,16 @@
 
 import UIKit
 
+struct recordSearchSettings {
+    static var type:String! = "video"
+    static var order:String! = "relevance"
+    static var videoType:String! = "All"
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
