@@ -26,7 +26,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
     
     var searchTest:String!
-    var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
+    var apiKey = "youtubeAPIKey"
     var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
     var idArray:Array<String> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
@@ -108,7 +108,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     
                     // 取得所有的搜尋結果項目（ items 陣列）
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
-                    //print("Dict = \(items)")
                     // 以迴圈迭代處理所有的搜尋結果，並且只保留所需的資料
                     for i in 0 ..< items.count {
                         self.getVideoDetails( (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String)
