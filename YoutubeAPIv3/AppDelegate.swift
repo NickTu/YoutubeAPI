@@ -11,6 +11,9 @@ import UIKit
 struct recordSearchSettings {
     static var type:String! = "video"
     static var order:String! = "relevance"
+    static var videoDuration:String! = "any"
+    static var videoDimension:String! = "any"
+    static var videoDefinition:String! = "any"
     static var videoType:String! = "All"
 }
 

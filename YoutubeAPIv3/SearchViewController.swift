@@ -26,7 +26,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
     
     var searchTest:String!
-    var apiKey = "youtubeAPIKey"
+    var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
     var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
     var idArray:Array<String> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
@@ -92,11 +92,21 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         
     func search(searchTest:String){
         var urlString:String
+        var urlStringVideoCategoryId:String!
+        var urlStringVideoDurationDimensionDefinition:String!
         if recordSearchSettings.videoType == "All" {
-             urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW"
+            urlStringVideoCategoryId = ""
+            
         }else {
-            urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
+            urlStringVideoCategoryId = "&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
         }
+        if recordSearchSettings.type == "video" {
+            urlStringVideoDurationDimensionDefinition = "&videoDuration=\(recordSearchSettings.videoDuration)&videoDimension=\(recordSearchSettings.videoDimension)&videoDefinition=\(recordSearchSettings.videoDefinition)"
+        }else {
+            urlStringVideoDurationDimensionDefinition = ""
+        }
+        
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         

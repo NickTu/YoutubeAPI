@@ -16,16 +16,20 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
-    let tableKey = ["type","order"]
+    let tableKey = ["type","order","videoDuration","videoDimension","videoDefinition"]
     var tableData : Dictionary<String , NSMutableArray> = [:]
+    var nowType : Int!
     
     
     override func viewDidLoad() {
         tableData[tableKey[0]] = [ "video", "channel", "playlist" ]
         tableData[tableKey[1]] = [ "date", "rating", "relevance","viewCount" ]
+        tableData[tableKey[2]] = [ "any", "long", "medium", "short"]
+        tableData[tableKey[3]] = [ "2d", "3d", "any"]
+        tableData[tableKey[4]] = [ "any", "high", "standard"]
         tableView.delegate = self
         tableView.dataSource = self
+        nowType = tableData[tableKey[0]]?.indexOfObject(recordSearchSettings.type)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,10 +43,19 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         case 0:
             lastIndex = NSIndexPath(forRow: (tableData[tableKey[0]]?.indexOfObject(recordSearchSettings.type))! , inSection: indexPath.section)
             recordSearchSettings.type = tableData[tableKey[0]]![indexPath.row] as! String
+            nowType = indexPath.row
         case 1:
             lastIndex = NSIndexPath(forRow: (tableData[tableKey[1]]?.indexOfObject(recordSearchSettings.order))! , inSection: indexPath.section)
             recordSearchSettings.order = tableData[tableKey[1]]![indexPath.row] as! String
-
+        case 2:
+            lastIndex = NSIndexPath(forRow: (tableData[tableKey[2]]?.indexOfObject(recordSearchSettings.videoDuration))! , inSection: indexPath.section)
+            recordSearchSettings.videoDuration = tableData[tableKey[2]]![indexPath.row] as! String
+        case 3:
+            lastIndex = NSIndexPath(forRow: (tableData[tableKey[3]]?.indexOfObject(recordSearchSettings.videoDimension))! , inSection: indexPath.section)
+            recordSearchSettings.videoDimension = tableData[tableKey[3]]![indexPath.row] as! String
+        case 4:
+            lastIndex = NSIndexPath(forRow: (tableData[tableKey[4]]?.indexOfObject(recordSearchSettings.videoDefinition))! , inSection: indexPath.section)
+            recordSearchSettings.videoDefinition = tableData[tableKey[4]]![indexPath.row] as! String
         default:
             lastIndex = nil
             print("Error indexPath.section = \(indexPath.section)")
@@ -50,6 +63,7 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         
         tableView.cellForRowAtIndexPath(lastIndex!)!.accessoryType = .None
         tableView.cellForRowAtIndexPath(indexPath)!.accessoryType = .Checkmark
+        tableView.reloadData()
         
     }
     
@@ -68,6 +82,24 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
             }else {
                 cell!.accessoryType = .None
             }
+        case 2:
+            if indexPath.row == (tableData[tableKey[2]]?.indexOfObject(recordSearchSettings.videoDuration))! {
+                cell!.accessoryType = .Checkmark
+            }else {
+                cell!.accessoryType = .None
+            }
+        case 3:
+            if indexPath.row == (tableData[tableKey[3]]?.indexOfObject(recordSearchSettings.videoDimension))! {
+                cell!.accessoryType = .Checkmark
+            }else {
+                cell!.accessoryType = .None
+            }
+        case 4:
+            if indexPath.row == (tableData[tableKey[4]]?.indexOfObject(recordSearchSettings.videoDefinition))! {
+                cell!.accessoryType = .Checkmark
+            }else {
+                cell!.accessoryType = .None
+            }
         default:
             print("Error indexPath.section = \(indexPath.section)")
         }
@@ -77,7 +109,12 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return tableKey.count
+        if nowType == 0 {
+            return tableKey.count
+        }else {
+            return 1
+        }
+        
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
