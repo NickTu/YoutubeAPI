@@ -26,12 +26,13 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
     
     var searchTest:String!
+    var searchSuccessTotalCount = 0
+    var searchSuccessCount = 0
     var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
-    var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
-    var idArray:Array<String> = []
+    var collectionDataArray: Dictionary<String,Dictionary<NSObject, AnyObject>> = [:]
+    var keyVideoId:Array<String> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
     let videoTypeDictionary = [ "All":"0", "Film & Animation":"1", "Autos & Vehicles":"2", "Music":"10", "Pets & Animals":"15", "Sports":"17", "Short Movies":"18", "Travel & Events":"19", "Gaming":"20", "Videoblogging":"21", "People & Blogs":"22", "Comedy":"23", "Entertainment":"24", "News & Politics":"25", "Howto & Style":"26", "Education":"27", "Science & Technology":"28", "Movies":"30", "Anime/Animation":"31", "Action/Adventure":"32", "Classics":"33", "Documentary":"35", "Drama":"36", "Family":"37", "Foreign":"38", "Horror":"39", "Sci-Fi/Fantasy":"40", "Thriller":"41", "Shorts":"42", "Shows":"43", "Trailers":"44" ]
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,8 +49,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        keyVideoId.removeAll(keepCapacity: false)
         collectionDataArray.removeAll(keepCapacity: false)
-        self.collectionView.reloadData()
         search(searchBar.text!)
         searchBar.resignFirstResponder()
     }
@@ -75,10 +76,10 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let title = cell.title as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let viewCount = cell.viewCount as UILabel
-        let details = collectionDataArray[indexPath.row]
-        title.text = details["title"] as? String
-        viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
-        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
+        let details = collectionDataArray[keyVideoId[indexPath.row]]
+        title.text = details!["title"] as? String
+        viewCount.text = "viewCount = " + (details!["viewCount"] as? String)!
+        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details!["thumbnail"] as? String)!)!)!)
         return cell
     }
     
@@ -91,9 +92,12 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
         
     func search(searchTest:String){
+        
         var urlString:String
         var urlStringVideoCategoryId:String!
         var urlStringVideoDurationDimensionDefinition:String!
+        self.searchSuccessTotalCount = 0
+        self.searchSuccessCount = 0
         if recordSearchSettings.videoType == "All" {
             urlStringVideoCategoryId = ""
             
@@ -114,17 +118,20 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             if HTTPStatusCode == 200 && error == nil {
                 // 將 JSON 資料轉換成字典物件
                 do {
-                    let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     
-                    // 取得所有的搜尋結果項目（ items 陣列）
+                    let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
-                    // 以迴圈迭代處理所有的搜尋結果，並且只保留所需的資料
+                    self.searchSuccessTotalCount = items.count
+                    
                     for i in 0 ..< items.count {
-                        self.getVideoDetails( (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String)
+                        let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
+                        self.keyVideoId.append( videoId )
+                        self.getVideoDetails( videoId )
                     }
+                    
                  } catch {
                     print(error)
-                }
+                 }
                 
             }else {
                 print("HTTP Status Code = \(HTTPStatusCode)")
@@ -157,9 +164,9 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
 
         var urlString: String!
         if recordSearchSettings.videoType == "All" {
-            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&maxResults=50&key=\(apiKey)&regionCode=TW&id=\(idVideo)"
+            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&key=\(apiKey)&regionCode=TW&id=\(idVideo)"
         }else {
-            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&maxResults=50&key=\(apiKey)&regionCode=TW&id=\(idVideo)&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
+            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&key=\(apiKey)&regionCode=TW&id=\(idVideo)&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
         }
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
@@ -184,9 +191,12 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     videoDetailsDict["title"] = snippetDict["title"]
                     videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                     videoDetailsDict["viewCount"] = items[0]["statistics"]!!["viewCount"]
+                    self.collectionDataArray[ idVideo ] = videoDetailsDict
                     
-                    self.collectionDataArray.append(videoDetailsDict)
-                    self.collectionView.reloadData()
+                    self.searchSuccessCount += 1
+                    if self.searchSuccessCount == self.searchSuccessTotalCount {
+                        self.collectionView.reloadData()
+                    }
                     
                 } catch {
                     print("Error = \(error)")
