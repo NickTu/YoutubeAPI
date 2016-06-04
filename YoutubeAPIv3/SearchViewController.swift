@@ -75,10 +75,15 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("idVideoCollectionCell", forIndexPath: indexPath) as! VideoCollectionCell
         let title = cell.title as UILabel
         let thumbnail = cell.thumbnail as UIImageView
-        let viewCount = cell.viewCount as UILabel
+        let count = cell.viewCount as UILabel
         let details = collectionDataArray[keyVideoId[indexPath.row]]
         title.text = details!["title"] as? String
-        viewCount.text = "viewCount = " + (details!["viewCount"] as? String)!
+        if recordSearchSettings.type == "playlist" {
+            count.text = "itemCount = " + String(details!["itemCount"]!)
+        }else {
+            count.text = "viewCount = " + (details!["viewCount"] as? String)!
+
+        }
         thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details!["thumbnail"] as? String)!)!)!)
         return cell
     }
@@ -163,11 +168,27 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     func getVideoDetails(idVideo: String) {
 
         var urlString: String!
+        var urlStringVideoCategoryId:String!
+        var urlStringType:String!
+        var count:String!
+        var part:String!
         if recordSearchSettings.videoType == "All" {
-            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&key=\(apiKey)&regionCode=TW&id=\(idVideo)"
+            urlStringVideoCategoryId = ""
+            
         }else {
-            urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,statistics&key=\(apiKey)&regionCode=TW&id=\(idVideo)&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
+            urlStringVideoCategoryId = "&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
         }
+        if recordSearchSettings.type == "playlist" {
+            urlStringType = "&part=snippet,contentDetails"
+            count = "itemCount"
+            part = "contentDetails"
+        }else {
+            urlStringType = "&part=snippet,statistics"
+            count = "viewCount"
+            part = "statistics"
+        }
+        
+        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&regionCode=TW&id=\(idVideo)" + urlStringVideoCategoryId
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -190,7 +211,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                     videoDetailsDict["title"] = snippetDict["title"]
                     videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
-                    videoDetailsDict["viewCount"] = items[0]["statistics"]!!["viewCount"]
+                    
+                    videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
                     self.collectionDataArray[ idVideo ] = videoDetailsDict
                     
                     self.searchSuccessCount += 1
