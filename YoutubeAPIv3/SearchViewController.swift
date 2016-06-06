@@ -76,15 +76,20 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let title = cell.title as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let count = cell.viewCount as UILabel
-        let details = collectionDataArray[keyVideoId[indexPath.row]]
-        title.text = details!["title"] as? String
-        if recordSearchSettings.type == "playlist" {
-            count.text = "itemCount = " + String(details!["itemCount"]!)
+        let details = collectionDataArray[keyVideoId[indexPath.row]]!
+        if details["title"] == nil {
+            title.text = ""
         }else {
-            count.text = "viewCount = " + (details!["viewCount"] as? String)!
+            title.text = details["title"] as? String
 
         }
-        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details!["thumbnail"] as? String)!)!)!)
+        if recordSearchSettings.type == "playlist" {
+            count.text = "itemCount = " + String(details["itemCount"]!)
+        }else {
+            count.text = "viewCount = " + (details["viewCount"] as? String)!
+
+        }
+        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
         return cell
     }
     
@@ -95,17 +100,23 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionView.frame.width/2-5, collectionView.frame.height/3)
     }
-        
+    
+    func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
+        let calendar = NSCalendar.currentCalendar()
+        let range = calendar.rangeOfUnit(.Day, inUnit: .Month, forDate: date)
+        return range.length
+    }
+    
     func search(searchTest:String){
         
         var urlString:String
         var urlStringVideoCategoryId:String!
         var urlStringVideoDurationDimensionDefinition:String!
+        var urlStringUploadTime:String! = ""
         self.searchSuccessTotalCount = 0
         self.searchSuccessCount = 0
         if recordSearchSettings.videoType == "All" {
             urlStringVideoCategoryId = ""
-            
         }else {
             urlStringVideoCategoryId = "&videoCategoryId=\(videoTypeDictionary[recordSearchSettings.videoType]!)"
         }
@@ -115,7 +126,50 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             urlStringVideoDurationDimensionDefinition = ""
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition
+        let date = NSDate()
+        let dateformatter = NSDateFormatter()
+        dateformatter.dateFormat = "yyyy-MM-dd'T'hh:mm:ss'Z'"
+        let dateString = dateformatter.stringFromDate(date)
+        
+        if recordSearchSettings.uploadTime == "anytime" {
+            urlStringUploadTime = ""
+        }else if recordSearchSettings.uploadTime == "today"{
+            
+            let formatter = NSDateFormatter();
+            formatter.dateFormat = "yyyy-MM-dd'T00:00:00Z'"
+            let todayString = formatter.stringFromDate(date)
+            urlStringUploadTime = "&publishedAfter=\(todayString)&publishedBefore=\(dateString)"
+            
+        }else if recordSearchSettings.uploadTime == "this week"{
+            
+            let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+            let comps = calendar!.components(.Weekday, fromDate: date)
+            let value = -comps.weekday + 1
+            let thisweek = NSCalendar.currentCalendar().dateByAddingUnit(.NSDayCalendarUnit, value: value, toDate: date, options: .MatchNextTime)
+            let formatter = NSDateFormatter();
+            formatter.dateFormat = "yyyy-MM-dd'T00:00:00Z'"
+            let weekDayString = formatter.stringFromDate(thisweek!)
+            urlStringUploadTime = "&publishedAfter=\(weekDayString)&publishedBefore=\(dateString)"
+            
+        }else if recordSearchSettings.uploadTime == "this month"{
+            
+            let formatter = NSDateFormatter();
+            formatter.dateFormat = "yyyy-MM-'01T00:00:00Z'"
+            let thisMonthString = formatter.stringFromDate(date)
+            urlStringUploadTime = "&publishedAfter=\(thisMonthString)&publishedBefore=\(dateString)"
+            
+        }else if recordSearchSettings.uploadTime == "this year"{
+        
+            let formatter = NSDateFormatter();
+            formatter.dateFormat = "yyyy-'01-01T00:00:00Z'"
+            let thisYearString = formatter.stringFromDate(date)
+            urlStringUploadTime = "&publishedAfter=\(thisYearString)&publishedBefore=\(dateString)"
+
+        }
+        
+        //print("\(recordSearchSettings.uploadTime) \(urlStringUploadTime)")
+        
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -199,24 +253,27 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                 do {
                     // 將 JSON 資料轉換成字典
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
-                    
                     // 從傳回的資料中取得第一筆字典記錄（通常也只會有一筆記錄）
                     let items: AnyObject! = resultsDict["items"] as AnyObject!
-                    let firstItemDict = (items as! Array<AnyObject>)[0] as! Dictionary<NSObject, AnyObject>
+                    if items.count == 1 {
+                        let firstItemDict = (items as! Array<AnyObject>)[0] as! Dictionary<NSObject, AnyObject>
                     
-                    // 取得包含所需資料的 snippet 字典
-                    let snippetDict = firstItemDict["snippet"] as! Dictionary<NSObject, AnyObject>
+                        // 取得包含所需資料的 snippet 字典
+                        let snippetDict = firstItemDict["snippet"] as! Dictionary<NSObject, AnyObject>
                     
-                    // 建立新的字典，只儲存我們想要知道的數值
-                    var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
-                    videoDetailsDict["title"] = snippetDict["title"]
-                    videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
+                        // 建立新的字典，只儲存我們想要知道的數值
+                        var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
+                        videoDetailsDict["title"] = snippetDict["title"]
+                        videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                     
-                    videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
-                    self.collectionDataArray[ idVideo ] = videoDetailsDict
-                    
-                    self.searchSuccessCount += 1
-                    if self.searchSuccessCount == self.searchSuccessTotalCount {
+                        videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
+                        self.collectionDataArray[ idVideo ] = videoDetailsDict
+                        
+                        self.searchSuccessCount += 1
+                        if self.searchSuccessCount == self.searchSuccessTotalCount {
+                            self.collectionView.reloadData()
+                        }
+                    }else {
                         self.collectionView.reloadData()
                     }
                     

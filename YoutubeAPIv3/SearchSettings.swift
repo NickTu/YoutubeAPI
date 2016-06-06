@@ -16,7 +16,7 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    let tableKey = ["type","order","videoDuration","videoDimension","videoDefinition"]
+    let tableKey = ["type","order","videoDuration","videoDimension","videoDefinition","uploadTime"]
     var tableData : Dictionary<String , NSMutableArray> = [:]
     var nowType : Int!
     
@@ -27,6 +27,8 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         tableData[tableKey[2]] = [ "any", "long", "medium", "short"]
         tableData[tableKey[3]] = [ "2d", "3d", "any"]
         tableData[tableKey[4]] = [ "any", "high", "standard"]
+        tableData[tableKey[5]] = [ "anytime", "today", "this week", "this month", "this year"]
+
         tableView.delegate = self
         tableView.dataSource = self
         nowType = tableData[tableKey[0]]?.indexOfObject(recordSearchSettings.type)
@@ -56,6 +58,10 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
         case 4:
             lastIndex = NSIndexPath(forRow: (tableData[tableKey[4]]?.indexOfObject(recordSearchSettings.videoDefinition))! , inSection: indexPath.section)
             recordSearchSettings.videoDefinition = tableData[tableKey[4]]![indexPath.row] as! String
+        case 5:
+            lastIndex = NSIndexPath(forRow: (tableData[tableKey[5]]?.indexOfObject(recordSearchSettings.uploadTime))! , inSection: indexPath.section)
+            recordSearchSettings.uploadTime = tableData[tableKey[5]]![indexPath.row] as! String
+
         default:
             lastIndex = nil
             print("Error indexPath.section = \(indexPath.section)")
@@ -96,6 +102,12 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
             }
         case 4:
             if indexPath.row == (tableData[tableKey[4]]?.indexOfObject(recordSearchSettings.videoDefinition))! {
+                cell!.accessoryType = .Checkmark
+            }else {
+                cell!.accessoryType = .None
+            }
+        case 5:
+            if indexPath.row == (tableData[tableKey[5]]?.indexOfObject(recordSearchSettings.uploadTime))! {
                 cell!.accessoryType = .Checkmark
             }else {
                 cell!.accessoryType = .None
