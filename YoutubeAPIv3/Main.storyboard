@@ -85,6 +85,8 @@
                     <connections>
                         <outlet property="cancelSearchButton" destination="M2A-KL-qHe" id="bSI-4c-BfN"/>
                         <outlet property="collectionView" destination="dZ4-eB-bF9" id="C1z-yo-nYR"/>
+                        <outlet property="collectionViewTop" destination="OyW-vB-gG7" id="060-yo-hmj"/>
+                        <outlet property="navigationBar" destination="cuE-t2-eML" id="bie-fT-mMm"/>
                         <outlet property="searchBar" destination="Sgk-UD-jm2" id="ZBK-pf-IDa"/>
                         <outlet property="searchDisplayController" destination="y8f-PO-J3i" id="xU1-sj-uDD"/>
                         <outlet property="searchSettings" destination="TIt-wr-EMh" id="ea8-X8-D1n"/>
@@ -206,6 +208,8 @@
                     <tabBarItem key="tabBarItem" title="Home" image="Home" id="cPa-gy-q4n"/>
                     <connections>
                         <outlet property="collectionView" destination="10h-yG-LUt" id="C2e-UV-VQf"/>
+                        <outlet property="collectionViewTop" destination="MxU-j6-tDD" id="gBt-BZ-qL7"/>
+                        <outlet property="navigationBar" destination="Igp-h3-d4q" id="vaZ-Jp-ZFI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>

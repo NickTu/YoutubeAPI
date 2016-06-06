@@ -15,17 +15,17 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var cancelSearchButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionViewTop: NSLayoutConstraint!
     @IBOutlet weak var searchViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     @IBAction func cancelSearch(sender: UIButton) {
-        searchTest = ""
         searchBar.text = ""
         sender.hidden = true
         searchViewConstraint.constant = 0
         searchBar.resignFirstResponder()
     }
     
-    var searchTest:String!
     var searchSuccessTotalCount = 0
     var searchSuccessCount = 0
     var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
@@ -33,19 +33,41 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     var keyVideoId:Array<String> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
     let videoTypeDictionary = [ "All":"0", "Film & Animation":"1", "Autos & Vehicles":"2", "Music":"10", "Pets & Animals":"15", "Sports":"17", "Short Movies":"18", "Travel & Events":"19", "Gaming":"20", "Videoblogging":"21", "People & Blogs":"22", "Comedy":"23", "Entertainment":"24", "News & Politics":"25", "Howto & Style":"26", "Education":"27", "Science & Technology":"28", "Movies":"30", "Anime/Animation":"31", "Action/Adventure":"32", "Classics":"33", "Documentary":"35", "Drama":"36", "Family":"37", "Foreign":"38", "Horror":"39", "Sci-Fi/Fantasy":"40", "Thriller":"41", "Shorts":"42", "Shows":"43", "Trailers":"44" ]
+    var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
         searchBar.delegate = self
         cancelSearchButton.hidden = true
         searchViewConstraint.constant = 0
+        
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: searchBar.frame.size.height + navigationBar.frame.size.height + 20, width: 50, height: 50)
+        view.addSubview(activityIndicator)
+        if searchBar.text?.characters.count > 0 {
+            cleanDataAndStartSearch()
+        }
+    }
+    
+    func cleanDataAndStartSearch(){
+        keyVideoId.removeAll(keepCapacity: false)
+        collectionDataArray.removeAll(keepCapacity: false)
+        collectionViewTop.constant = activityIndicator.frame.height
+        search(searchBar.text!)
+    }
+    
+    func endSearch(){
+        self.activityIndicator.stopAnimating()
+        collectionViewTop.constant = 0
+        self.collectionView.reloadData()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -109,6 +131,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func search(searchTest:String){
         
+        activityIndicator.startAnimating()
         var urlString:String
         var urlStringVideoCategoryId:String!
         var urlStringVideoDurationDimensionDefinition:String!
@@ -166,8 +189,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             urlStringUploadTime = "&publishedAfter=\(thisYearString)&publishedBefore=\(dateString)"
 
         }
-        
-        //print("\(recordSearchSettings.uploadTime) \(urlStringUploadTime)")
         
         urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
@@ -271,7 +292,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         
                         self.searchSuccessCount += 1
                         if self.searchSuccessCount == self.searchSuccessTotalCount {
-                            self.collectionView.reloadData()
+                            self.endSearch()
                         }
                     }else {
                         self.collectionView.reloadData()

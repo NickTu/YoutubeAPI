@@ -20,7 +20,6 @@ class VideoCategories: UIViewController,UITableViewDataSource,UITableViewDelegat
     
     
     override func viewDidLoad() {
-        print(recordSearchSettings.videoType)
         tableView.delegate = self
         tableView.dataSource = self
     }

@@ -11,10 +11,13 @@ import UIKit
 class HomeViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var navigationTitle: UINavigationItem!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var collectionViewTop: NSLayoutConstraint!
+
     var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
     var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
+    var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +28,23 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        cleanDataAndStartSearch()
+    }
+    
+    func cleanDataAndStartSearch(){
+        collectionDataArray.removeAll(keepCapacity: false)
+        collectionViewTop.constant = activityIndicator.frame.height
         search()
-        
+    }
+    
+    func endSearch(){
+        self.activityIndicator.stopAnimating()
+        collectionViewTop.constant = 0
+        self.collectionView.reloadData()
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -77,9 +95,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         //videoDetailsDict["videoID"] = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)["videoId"]
                         
                         self.collectionDataArray.append(videoDetailsDict)
-                        
-                        self.collectionView.reloadData()
                     }
+                    self.endSearch()
                 } catch {
                     print(error)
                 }
