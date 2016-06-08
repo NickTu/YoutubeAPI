@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+class HomeViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIScrollViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -18,6 +18,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
     var activityIndicator: UIActivityIndicatorView!
+    var pageToken:String!
+    var hasNextPage:Bool!
+    var isSearch:Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
+        pageToken = ""
+        hasNextPage = true
+        isSearch = false
         cleanDataAndStartSearch()
     }
     
@@ -45,6 +51,24 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         self.activityIndicator.stopAnimating()
         collectionViewTop.constant = 0
         self.collectionView.reloadData()
+        isSearch = false
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        //print("scrollViewDidScroll")
+        let offset = scrollView.contentOffset /* 當前frame距離整個ScrollView的偏移量 */
+        let bounds = scrollView.bounds
+        let size = scrollView.contentSize /* 整個ScrollView的size */
+        let inset = scrollView.contentInset /* 整個ScrollView的EdgeInsets */
+        let y = offset.y + bounds.size.height - inset.bottom
+        let h = size.height
+        let reload_distance = -bounds.size.height*10/3
+        
+        if y > (h + CGFloat(reload_distance) ) && !self.isSearch && self.hasNextPage{
+            self.isSearch = true
+            search()
+        }
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,7 +97,15 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func search(){
         
-        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&chart=mostPopular&maxResults=50&key=\(apiKey)&regionCode=TW"
+        var urlStringPageToken:String!
+        
+        if self.pageToken.characters.count > 0 {
+            urlStringPageToken = "&pageToken=\(self.pageToken)"
+        }else {
+            urlStringPageToken = ""
+        }
+        
+        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&chart=mostPopular&maxResults=50&key=\(apiKey)&regionCode=TW" + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -85,6 +117,23 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     
                     // 取得所有的搜尋結果項目（ items 陣列）
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
+                    
+                    /*let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["totalResults"]
+                    let thisCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["resultsPerPage"]
+                    print("This search count is \(thisCount)")
+                    print("This search totalcount is \(totalCount)")*/
+
+                    if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
+                        self.hasNextPage = true
+                        self.pageToken = resultsDict["nextPageToken"] as! String
+                    }else if resultsDict["nextPageToken"] == nil && resultsDict["prevPageToken"] != nil {
+                        self.hasNextPage = false
+                        self.pageToken = ""
+                    }else if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] == nil {
+                        self.hasNextPage = true
+                        self.pageToken = resultsDict["nextPageToken"] as! String
+                    }
+                    
                     // 以迴圈迭代處理所有的搜尋結果，並且只保留所需的資料
                     for i in 0 ..< items.count {
                         let snippetDict = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>

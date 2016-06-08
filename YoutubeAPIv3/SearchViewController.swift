@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIScrollViewDelegate {
 
     @IBOutlet weak var videoCategories: UIBarButtonItem!
     @IBOutlet weak var searchSettings: UIBarButtonItem!
@@ -26,25 +26,28 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         searchBar.resignFirstResponder()
     }
     
-    var searchSuccessTotalCount = 0
     var searchSuccessCount = 0
+    var successCount = 0
     var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
     var collectionDataArray: Dictionary<String,Dictionary<NSObject, AnyObject>> = [:]
     var keyVideoId:Array<String> = []
     let youtubeNetworkAddress = "https://www.googleapis.com/youtube/v3/"
     let videoTypeDictionary = [ "All":"0", "Film & Animation":"1", "Autos & Vehicles":"2", "Music":"10", "Pets & Animals":"15", "Sports":"17", "Short Movies":"18", "Travel & Events":"19", "Gaming":"20", "Videoblogging":"21", "People & Blogs":"22", "Comedy":"23", "Entertainment":"24", "News & Politics":"25", "Howto & Style":"26", "Education":"27", "Science & Technology":"28", "Movies":"30", "Anime/Animation":"31", "Action/Adventure":"32", "Classics":"33", "Documentary":"35", "Drama":"36", "Family":"37", "Foreign":"38", "Horror":"39", "Sci-Fi/Fantasy":"40", "Thriller":"41", "Shorts":"42", "Shows":"43", "Trailers":"44" ]
     var activityIndicator: UIActivityIndicatorView!
+    var pageToken:String!
+    var hasNextPage:Bool!
+    var isSearch:Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
         searchBar.delegate = self
         cancelSearchButton.hidden = true
         searchViewConstraint.constant = 0
-        
+        pageToken = ""
+        hasNextPage = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -52,6 +55,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: searchBar.frame.size.height + navigationBar.frame.size.height + 20, width: 50, height: 50)
         view.addSubview(activityIndicator)
+        hasNextPage = true
+        isSearch = false
         if searchBar.text?.characters.count > 0 {
             cleanDataAndStartSearch()
         }
@@ -68,6 +73,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         self.activityIndicator.stopAnimating()
         collectionViewTop.constant = 0
         self.collectionView.reloadData()
+        isSearch = false
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -88,6 +94,24 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         cancelSearchButton.hidden = true
         searchBar.frame.size.width = view.bounds.width
     }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        //print("scrollViewDidScroll")
+        let offset = scrollView.contentOffset /* 當前frame距離整個ScrollView的偏移量 */
+        let bounds = scrollView.bounds
+        let size = scrollView.contentSize /* 整個ScrollView的size */
+        let inset = scrollView.contentInset /* 整個ScrollView的EdgeInsets */
+        let y = offset.y + bounds.size.height - inset.bottom
+        let h = size.height
+        let reload_distance = -bounds.size.height*10/3
+        
+        if y > (h + CGFloat(reload_distance) ) && !self.isSearch && self.hasNextPage{
+            self.isSearch = true
+            search(searchBar.text!)
+        }
+    }
+
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionDataArray.count
@@ -136,7 +160,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         var urlStringVideoCategoryId:String!
         var urlStringVideoDurationDimensionDefinition:String!
         var urlStringUploadTime:String! = ""
-        self.searchSuccessTotalCount = 0
+        var urlStringPageToken:String!
+        self.successCount = 0
         self.searchSuccessCount = 0
         if recordSearchSettings.videoType == "All" {
             urlStringVideoCategoryId = ""
@@ -190,7 +215,13 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
 
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime
+        if self.pageToken.characters.count == 0 {
+            urlStringPageToken = ""
+        }else {
+            urlStringPageToken = "&pageToken=\(self.pageToken)"
+        }
+        
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -201,7 +232,22 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
-                    self.searchSuccessTotalCount = items.count
+                    self.searchSuccessCount = items.count
+                    /*let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["totalResults"]
+                    let thisCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["resultsPerPage"]
+                    print("This search count is \(thisCount)")
+                    print("This search totalcount is \(totalCount)")*/
+                    
+                    if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
+                        self.hasNextPage = true
+                        self.pageToken = resultsDict["nextPageToken"] as! String
+                    }else if resultsDict["nextPageToken"] == nil && resultsDict["prevPageToken"] != nil {
+                        self.hasNextPage = false
+                        self.pageToken = ""
+                    }else if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] == nil {
+                        self.hasNextPage = true
+                        self.pageToken = resultsDict["nextPageToken"] as! String
+                    }
                     
                     for i in 0 ..< items.count {
                         let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
@@ -290,8 +336,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
                         self.collectionDataArray[ idVideo ] = videoDetailsDict
                         
-                        self.searchSuccessCount += 1
-                        if self.searchSuccessCount == self.searchSuccessTotalCount {
+                        self.successCount += 1
+                        if self.successCount == self.searchSuccessCount {
                             self.endSearch()
                         }
                     }else {
