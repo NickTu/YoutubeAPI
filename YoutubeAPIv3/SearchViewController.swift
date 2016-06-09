@@ -36,7 +36,9 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     var activityIndicator: UIActivityIndicatorView!
     var pageToken:String!
     var hasNextPage:Bool!
-    var isSearch:Bool!
+    var isScrollSearch:Bool!
+    var selectedIndex:Int!
+    var againSearch:Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         searchViewConstraint.constant = 0
         pageToken = ""
         hasNextPage = false
+        againSearch = true
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -56,13 +59,26 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: searchBar.frame.size.height + navigationBar.frame.size.height + 20, width: 50, height: 50)
         view.addSubview(activityIndicator)
         hasNextPage = true
-        isSearch = false
-        if searchBar.text?.characters.count > 0 {
+        isScrollSearch = false
+        if searchBar.text?.characters.count > 0 && againSearch{
             cleanDataAndStartSearch()
         }
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "idPlaylistItemViewController" {
+            againSearch = false
+            let playlistItemViewController = segue.destinationViewController as! PlaylistItemViewController
+            let details = collectionDataArray[keyVideoId[selectedIndex]]!
+            playlistItemViewController.playlistId = details["playlistID"] as! String
+        }else {
+            againSearch = true
+        }
+    }
+    
     func cleanDataAndStartSearch(){
+        self.collectionView.scrollEnabled = false
         keyVideoId.removeAll(keepCapacity: false)
         collectionDataArray.removeAll(keepCapacity: false)
         collectionViewTop.constant = activityIndicator.frame.height
@@ -73,7 +89,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         self.activityIndicator.stopAnimating()
         collectionViewTop.constant = 0
         self.collectionView.reloadData()
-        isSearch = false
+        self.collectionView.scrollEnabled = true
+        isScrollSearch = false
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -106,8 +123,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let h = size.height
         let reload_distance = -bounds.size.height*10/3
         
-        if y > (h + CGFloat(reload_distance) ) && !self.isSearch && self.hasNextPage{
-            self.isSearch = true
+        if y > (h + CGFloat(reload_distance) ) && !self.isScrollSearch && self.hasNextPage{
+            self.isScrollSearch = true
             search(searchBar.text!)
         }
     }
@@ -145,6 +162,14 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionView.frame.width/2-5, collectionView.frame.height/3)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if recordSearchSettings.type != "video" {
+            selectedIndex = indexPath.row
+            performSegueWithIdentifier("idPlaylistItemViewController", sender: self)
+        }
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
@@ -252,7 +277,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     for i in 0 ..< items.count {
                         let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
                         self.keyVideoId.append( videoId )
-                        self.getVideoDetails( videoId )
+                        self.getDetails( videoId )
                     }
                     
                  } catch {
@@ -286,7 +311,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         task.resume()
     }
     
-    func getVideoDetails(idVideo: String) {
+    func getDetails(id: String) {
 
         var urlString: String!
         var urlStringVideoCategoryId:String!
@@ -303,13 +328,17 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             urlStringType = "&part=snippet,contentDetails"
             count = "itemCount"
             part = "contentDetails"
+        }else if recordSearchSettings.type == "channel" {
+            urlStringType = "&part=snippet,statistics,contentDetails"
+            count = "viewCount"
+            part = "statistics"
         }else {
             urlStringType = "&part=snippet,statistics"
             count = "viewCount"
             part = "statistics"
         }
-        
-        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&regionCode=TW&id=\(idVideo)" + urlStringVideoCategoryId
+
+        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&regionCode=TW&id=\(id)" + urlStringVideoCategoryId
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -332,9 +361,16 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
-                    
                         videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
-                        self.collectionDataArray[ idVideo ] = videoDetailsDict
+                        
+                        if recordSearchSettings.type == "channel" {
+                            videoDetailsDict["playlistID"] = ((firstItemDict["contentDetails"] as! Dictionary<NSObject, AnyObject>)["relatedPlaylists"] as! Dictionary<NSObject, AnyObject>)["uploads"]
+                        }else if recordSearchSettings.type == "playlist" {
+                            videoDetailsDict["playlistID"] = id
+                        }
+                        
+                        
+                        self.collectionDataArray[ id ] = videoDetailsDict
                         
                         self.successCount += 1
                         if self.successCount == self.searchSuccessCount {

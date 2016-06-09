@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */; };
 		ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA628881CFC7F39001DC12F /* AppDelegate.swift */; };
 		ABA628951CFC7F39001DC12F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABA628931CFC7F39001DC12F /* LaunchScreen.storyboard */; };
 		ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewController.swift; sourceTree = "<group>"; };
 		ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeAPIv3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA628881CFC7F39001DC12F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ABA628941CFC7F39001DC12F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				ABA628A01CFC7F75001DC12F /* SearchSettings.swift */,
 				ABA628A21CFC7F7D001DC12F /* VideoCollectionCell.swift */,
 				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
+				AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */,
 				ABA628A81CFC7FC6001DC12F /* Assets.xcassets */,
 				ABA628A61CFC7FB1001DC12F /* Main.storyboard */,
 				ABA628931CFC7F39001DC12F /* LaunchScreen.storyboard */,
@@ -153,6 +156,7 @@
 			files = (
 				ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */,
 				ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */,
+				AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */,
 				ABA6289F1CFC7F6D001DC12F /* VideoCategories.swift in Sources */,
 				ABA628A11CFC7F75001DC12F /* SearchSettings.swift in Sources */,
 				ABA628AB1CFD68E3001DC12F /* HomeViewController.swift in Sources */,
@@ -298,6 +302,7 @@
 				ABA6289B1CFC7F39001DC12F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

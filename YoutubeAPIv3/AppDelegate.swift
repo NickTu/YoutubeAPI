@@ -9,7 +9,7 @@
 import UIKit
 
 struct recordSearchSettings {
-    static var type:String! = "video"
+    static var type:String! = "channel"
     static var order:String! = "relevance"
     static var uploadTime:String! = "anytime"
     static var videoDuration:String! = "any"
