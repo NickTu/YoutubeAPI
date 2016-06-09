@@ -28,6 +28,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
     var pageToken:String!
     var hasNextPage:Bool!
     var isSearch:Bool!
+    var selectedIndex:Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +47,15 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "idPlay"{
+            let playViewController = segue.destinationViewController as! PlayViewController
+            let details = collectionDataArray[keyVideoId[selectedIndex]]!
+            playViewController.videoID = details["videoID"] as! String
+        }
     }
     
     func startSearch(){
@@ -76,6 +86,11 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
         }
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        selectedIndex = indexPath.row
+        performSegueWithIdentifier("idPlay", sender: self)
+    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionDataArray.count
@@ -204,6 +219,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["viewCount"] = (firstItemDict["statistics"] as! Dictionary<NSObject, AnyObject>)["viewCount"]
+                        videoDetailsDict["videoID"] = videoId
                         self.collectionDataArray[ videoId ] = videoDetailsDict
                         
                         self.successCount += 1

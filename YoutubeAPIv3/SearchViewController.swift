@@ -67,11 +67,16 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "idPlaylistItemViewController" {
+        if segue.identifier == "idPlaylistItem" {
             againSearch = false
             let playlistItemViewController = segue.destinationViewController as! PlaylistItemViewController
             let details = collectionDataArray[keyVideoId[selectedIndex]]!
             playlistItemViewController.playlistId = details["playlistID"] as! String
+        } else if segue.identifier == "idPlay"{
+            againSearch = false
+            let playViewController = segue.destinationViewController as! PlayViewController
+            let details = collectionDataArray[keyVideoId[selectedIndex]]!
+            playViewController.videoID = details["videoID"] as! String
         }else {
             againSearch = true
         }
@@ -168,7 +173,10 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         
         if recordSearchSettings.type != "video" {
             selectedIndex = indexPath.row
-            performSegueWithIdentifier("idPlaylistItemViewController", sender: self)
+            performSegueWithIdentifier("idPlaylistItem", sender: self)
+        }else {
+            selectedIndex = indexPath.row
+            performSegueWithIdentifier("idPlay", sender: self)
         }
     }
     
@@ -299,6 +307,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfiguration.timeoutIntervalForRequest = 0.5
         
         let session = NSURLSession(configuration: sessionConfiguration)
         
@@ -367,6 +376,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                             videoDetailsDict["playlistID"] = ((firstItemDict["contentDetails"] as! Dictionary<NSObject, AnyObject>)["relatedPlaylists"] as! Dictionary<NSObject, AnyObject>)["uploads"]
                         }else if recordSearchSettings.type == "playlist" {
                             videoDetailsDict["playlistID"] = id
+                        }else {
+                            videoDetailsDict["videoID"] = id
                         }
                         
                         

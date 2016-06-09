@@ -92,7 +92,8 @@
                         <outlet property="searchSettings" destination="TIt-wr-EMh" id="ea8-X8-D1n"/>
                         <outlet property="searchViewConstraint" destination="w9K-rJ-33x" id="wMf-Ba-Uwx"/>
                         <outlet property="videoCategories" destination="Mad-ib-6rz" id="ae7-mB-gqM"/>
-                        <segue destination="v5c-Mb-25l" kind="show" identifier="idPlaylistItemViewController" id="03Z-Ws-vAI"/>
+                        <segue destination="v5c-Mb-25l" kind="show" identifier="idPlaylistItem" id="03Z-Ws-vAI"/>
+                        <segue destination="W7s-P3-CSf" kind="show" identifier="idPlay" id="sxi-VS-QhV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -105,7 +106,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="743" y="-300"/>
+            <point key="canvasLocation" x="753" y="-346"/>
         </scene>
         <!--Video Categories-->
         <scene sceneID="lQP-wU-5gZ">
@@ -163,7 +164,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sle-tB-afm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="988" y="489"/>
+            <point key="canvasLocation" x="796" y="414"/>
         </scene>
         <!--Home-->
         <scene sceneID="wg7-f3-ORb">
@@ -327,11 +328,60 @@
                         <outlet property="collectionView" destination="gr1-qL-ZAT" id="ADN-ol-vSE"/>
                         <outlet property="collectionViewTop" destination="BTK-Hp-dqC" id="XVP-xI-8r3"/>
                         <outlet property="navigationBar" destination="8Hc-FT-FBH" id="FSS-ed-dGE"/>
+                        <segue destination="W7s-P3-CSf" kind="show" identifier="idPlay" id="9Y4-LJ-AFh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4HY-qd-TGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1449" y="-150"/>
+        </scene>
+        <!--Play View Controller-->
+        <scene sceneID="mkG-ga-rU7">
+            <objects>
+                <viewController id="W7s-P3-CSf" customClass="PlayViewController" customModule="YoutubeAPIv3" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="G1y-iN-1Ax"/>
+                        <viewControllerLayoutGuide type="bottom" id="3R3-PP-dJ7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="DB6-6M-DcO">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UYW-KC-1bu">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="b2X-jy-rTz">
+                                        <barButtonItem key="leftBarButtonItem" title="Back" id="h1H-2e-Guv">
+                                            <connections>
+                                                <action selector="backViewController:" destination="W7s-P3-CSf" id="oLy-eB-3wV"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYv-vv-wMa" customClass="YTPlayerView">
+                                <rect key="frame" x="0.0" y="64" width="600" height="199"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="UYW-KC-1bu" firstAttribute="trailing" secondItem="VYv-vv-wMa" secondAttribute="trailing" id="2s2-cK-4Me"/>
+                            <constraint firstItem="3R3-PP-dJ7" firstAttribute="top" secondItem="VYv-vv-wMa" secondAttribute="bottom" constant="288" id="Di4-oi-qGE"/>
+                            <constraint firstItem="VYv-vv-wMa" firstAttribute="top" secondItem="UYW-KC-1bu" secondAttribute="bottom" id="Rlt-iA-e00"/>
+                            <constraint firstItem="UYW-KC-1bu" firstAttribute="leading" secondItem="DB6-6M-DcO" secondAttribute="leading" id="X9u-dj-hAQ"/>
+                            <constraint firstItem="UYW-KC-1bu" firstAttribute="leading" secondItem="VYv-vv-wMa" secondAttribute="leading" id="skU-j2-Au4"/>
+                            <constraint firstAttribute="trailing" secondItem="UYW-KC-1bu" secondAttribute="trailing" id="uCA-Ww-jTt"/>
+                            <constraint firstItem="UYW-KC-1bu" firstAttribute="top" secondItem="G1y-iN-1Ax" secondAttribute="bottom" id="xp4-4a-ENp"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="playerView" destination="VYv-vv-wMa" id="dCe-Ap-iiN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="58s-QW-d3H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2167" y="-171"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -359,4 +409,7 @@
         <image name="playlist" width="32" height="32"/>
         <image name="search" width="32" height="32"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="9Y4-LJ-AFh"/>
+    </inferredMetricsTieBreakers>
 </document>
