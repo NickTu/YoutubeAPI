@@ -72,7 +72,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             let playlistItemViewController = segue.destinationViewController as! PlaylistItemViewController
             let details = collectionDataArray[keyVideoId[selectedIndex]]!
             playlistItemViewController.playlistId = details["playlistID"] as! String
-        } else if segue.identifier == "idPlay"{
+        } else if segue.identifier == "idSearchPlay"{
             againSearch = false
             let playViewController = segue.destinationViewController as! PlayViewController
             let details = collectionDataArray[keyVideoId[selectedIndex]]!
@@ -176,7 +176,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             performSegueWithIdentifier("idPlaylistItem", sender: self)
         }else {
             selectedIndex = indexPath.row
-            performSegueWithIdentifier("idPlay", sender: self)
+            performSegueWithIdentifier("idSearchPlay", sender: self)
         }
     }
     
@@ -307,7 +307,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfiguration.timeoutIntervalForRequest = 0.5
         
         let session = NSURLSession(configuration: sessionConfiguration)
         

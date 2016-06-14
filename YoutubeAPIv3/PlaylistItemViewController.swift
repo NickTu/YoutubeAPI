@@ -51,7 +51,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "idPlay"{
+        if segue.identifier == "idPlaylistItemPlay"{
             let playViewController = segue.destinationViewController as! PlayViewController
             let details = collectionDataArray[keyVideoId[selectedIndex]]!
             playViewController.videoID = details["videoID"] as! String
@@ -89,7 +89,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         selectedIndex = indexPath.row
-        performSegueWithIdentifier("idPlay", sender: self)
+        performSegueWithIdentifier("idPlaylistItemPlay", sender: self)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

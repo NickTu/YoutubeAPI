@@ -21,16 +21,23 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
+    var selectedIndex:Int!
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "idHomePlay"{
+            let playViewController = segue.destinationViewController as! PlayViewController
+            let details = collectionDataArray[selectedIndex]
+            playViewController.videoID = details["videoID"] as! String
+        }
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
         activityIndicator.startAnimating()
@@ -39,6 +46,10 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         hasNextPage = true
         isScrollSearch = false
         cleanDataAndStartSearch()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     func cleanDataAndStartSearch(){
@@ -56,7 +67,6 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        //print("scrollViewDidScroll")
         let offset = scrollView.contentOffset /* 當前frame距離整個ScrollView的偏移量 */
         let bounds = scrollView.bounds
         let size = scrollView.contentSize /* 整個ScrollView的size */
@@ -69,6 +79,13 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             self.isScrollSearch = true
             search()
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        selectedIndex = indexPath.row
+        performSegueWithIdentifier("idHomePlay", sender: self)
+        
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -117,11 +134,6 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     
                     // 取得所有的搜尋結果項目（ items 陣列）
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
-                    
-                    /*let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["totalResults"]
-                    let thisCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject>)["resultsPerPage"]
-                    print("This search count is \(thisCount)")
-                    print("This search totalcount is \(totalCount)")*/
 
                     if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
                         self.hasNextPage = true
@@ -141,7 +153,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["viewCount"] = items[i]["statistics"]!["viewCount"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
-                        //videoDetailsDict["videoID"] = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)["videoId"]
+                        videoDetailsDict["videoID"] = items[i]["id"] as! String
                         
                         self.collectionDataArray.append(videoDetailsDict)
                     }
