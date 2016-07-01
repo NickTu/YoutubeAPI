@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0346851D249ED700F50CE4 /* LiveViewController.swift */; };
 		AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */; };
 		AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6100911D09A2DD00AB102D /* PlayViewController.swift */; };
 		ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA628881CFC7F39001DC12F /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		1184EAE8DF552CDDEE991422 /* Pods-YoutubeAPIv3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeAPIv3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YoutubeAPIv3/Pods-YoutubeAPIv3.debug.xcconfig"; sourceTree = "<group>"; };
 		5A3078B26B8E096D7A33D136 /* libPods-YoutubeAPIv3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YoutubeAPIv3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB0346851D249ED700F50CE4 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewController.swift; sourceTree = "<group>"; };
 		AB6100911D09A2DD00AB102D /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeAPIv3.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 				ABA628881CFC7F39001DC12F /* AppDelegate.swift */,
 				ABA628AA1CFD68E3001DC12F /* HomeViewController.swift */,
 				ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */,
+				AB0346851D249ED700F50CE4 /* LiveViewController.swift */,
 				ABA6289E1CFC7F6D001DC12F /* VideoCategories.swift */,
 				ABA628A01CFC7F75001DC12F /* SearchSettings.swift */,
 				ABA628A21CFC7F7D001DC12F /* VideoCollectionCell.swift */,
@@ -239,6 +242,7 @@
 				ABA6289F1CFC7F6D001DC12F /* VideoCategories.swift in Sources */,
 				ABA628A11CFC7F75001DC12F /* SearchSettings.swift in Sources */,
 				ABA628AB1CFD68E3001DC12F /* HomeViewController.swift in Sources */,
+				AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */,
 				ABA628A41CFC7F7D001DC12F /* VideoCollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

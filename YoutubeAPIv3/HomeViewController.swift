@@ -25,7 +25,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "idHomePlay"{
+        if segue.identifier == "idLivePlay"{
             let playViewController = segue.destinationViewController as! PlayViewController
             let details = collectionDataArray[selectedIndex]
             playViewController.videoID = details["videoID"] as! String
@@ -98,9 +98,25 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let thumbnail = cell.thumbnail as UIImageView
         let viewCount = cell.viewCount as UILabel
         let details = collectionDataArray[indexPath.row]
-        title.text = details["title"] as? String
-        viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
-        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
+        
+        if details["title"] == nil {
+            title.text = "No title"
+        }else {
+            title.text = details["title"] as? String
+        }
+        
+        if details["viewCount"] == nil {
+            viewCount.text = "No viewCount"
+        } else {
+            viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
+        }
+        
+        if details["thumbnail"] == nil {
+            thumbnail.image = UIImage(named: "NoImage")
+        } else {
+            thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
+        }
+
         return cell
     }
     
@@ -127,7 +143,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let targetURL = NSURL(string: urlString)
         
         performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+            print("completion 1")
             if HTTPStatusCode == 200 && error == nil {
+                print("completion 2")
                 // 將 JSON 資料轉換成字典物件
                 do {
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
@@ -173,6 +191,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
         
+        print("performGetRequest")
         let request = NSMutableURLRequest(URL: targetURL)
         request.HTTPMethod = "GET"
         
@@ -181,7 +200,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let session = NSURLSession(configuration: sessionConfiguration)
         
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            print("dataTaskWithRequest")
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                print("dispatch_async")
                 completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
             })
         })

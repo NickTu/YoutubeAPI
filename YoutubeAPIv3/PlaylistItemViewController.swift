@@ -102,9 +102,26 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
         let thumbnail = cell.thumbnail as UIImageView
         let count = cell.viewCount as UILabel
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
-        title.text = details["title"] as? String
-        count.text = "viewCount = " + (details["viewCount"] as? String)!
-        thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
+        
+        
+        if details["title"] == nil {
+            title.text = "No title"
+        }else {
+            title.text = details["title"] as? String
+        }
+        
+        if details["viewCount"] == nil {
+            count.text = "No viewCount"
+        } else {
+            count.text = "viewCount = " + (details["viewCount"] as? String)!
+        }
+        
+        if details["thumbnail"] == nil {
+            thumbnail.image = UIImage(named: "NoImage")
+        } else {
+            thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
+        }
+        
         return cell
     }
     

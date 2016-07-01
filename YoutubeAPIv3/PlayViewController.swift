@@ -19,6 +19,7 @@ class PlayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(videoID)
         playerView.loadWithVideoId(videoID)
         // Do any additional setup after loading the view.
     }

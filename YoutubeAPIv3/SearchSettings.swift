@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate {
+class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
