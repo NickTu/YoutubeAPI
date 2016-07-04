@@ -22,12 +22,13 @@ class SearchSettings: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     
     override func viewDidLoad() {
-        tableData[tableKey[0]] = [ "video", "channel", "playlist" ]
-        tableData[tableKey[1]] = [ "date", "rating", "relevance","viewCount" ]
-        tableData[tableKey[2]] = [ "any", "long", "medium", "short"]
-        tableData[tableKey[3]] = [ "2d", "3d", "any"]
-        tableData[tableKey[4]] = [ "any", "high", "standard"]
-        tableData[tableKey[5]] = [ "anytime", "today", "this week", "this month", "this year"]
+        
+        tableData = [ tableKey[0]:[ "video", "channel", "playlist" ],
+                      tableKey[1]:[ "date", "rating", "relevance","viewCount" ],
+                      tableKey[2]:[ "any", "long", "medium", "short"],
+                      tableKey[3]:[ "2d", "3d", "any"],
+                      tableKey[4]:[ "any", "high", "standard"],
+                      tableKey[5]:[ "anytime", "today", "this week", "this month", "this year"] ]
 
         tableView.delegate = self
         tableView.dataSource = self

@@ -10,6 +10,10 @@
 		AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0346851D249ED700F50CE4 /* LiveViewController.swift */; };
 		AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */; };
 		AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6100911D09A2DD00AB102D /* PlayViewController.swift */; };
+		AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */; };
+		AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */; };
+		AB7E9BCC1D27541A00439BD4 /* LiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */; };
+		AB7E9BD01D28A7A900439BD4 /* LivePlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BCF1D28A7A900439BD4 /* LivePlayViewController.swift */; };
 		ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA628881CFC7F39001DC12F /* AppDelegate.swift */; };
 		ABA628951CFC7F39001DC12F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABA628931CFC7F39001DC12F /* LaunchScreen.storyboard */; };
 		ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */; };
@@ -29,6 +33,10 @@
 		AB0346851D249ED700F50CE4 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewController.swift; sourceTree = "<group>"; };
 		AB6100911D09A2DD00AB102D /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAPSPageMenu.swift; sourceTree = "<group>"; };
+		AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLiveViewController.swift; sourceTree = "<group>"; };
+		AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveViewController.xib; sourceTree = "<group>"; };
+		AB7E9BCF1D28A7A900439BD4 /* LivePlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LivePlayViewController.swift; sourceTree = "<group>"; };
 		ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeAPIv3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA628881CFC7F39001DC12F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ABA628941CFC7F39001DC12F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -94,16 +102,20 @@
 		ABA628871CFC7F39001DC12F /* YoutubeAPIv3 */ = {
 			isa = PBXGroup;
 			children = (
+				AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */,
 				ABA628881CFC7F39001DC12F /* AppDelegate.swift */,
 				ABA628AA1CFD68E3001DC12F /* HomeViewController.swift */,
 				ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */,
+				AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */,
 				AB0346851D249ED700F50CE4 /* LiveViewController.swift */,
+				AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */,
 				ABA6289E1CFC7F6D001DC12F /* VideoCategories.swift */,
 				ABA628A01CFC7F75001DC12F /* SearchSettings.swift */,
 				ABA628A21CFC7F7D001DC12F /* VideoCollectionCell.swift */,
 				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
 				AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */,
 				AB6100911D09A2DD00AB102D /* PlayViewController.swift */,
+				AB7E9BCF1D28A7A900439BD4 /* LivePlayViewController.swift */,
 				ABA628A81CFC7FC6001DC12F /* Assets.xcassets */,
 				ABA628A61CFC7FB1001DC12F /* Main.storyboard */,
 				ABA628931CFC7F39001DC12F /* LaunchScreen.storyboard */,
@@ -176,6 +188,7 @@
 				ABA628951CFC7F39001DC12F /* LaunchScreen.storyboard in Resources */,
 				ABA628A51CFC7F7D001DC12F /* VideoCollectionCellXib.xib in Resources */,
 				ABA628A91CFC7FC6001DC12F /* Assets.xcassets in Resources */,
+				AB7E9BCC1D27541A00439BD4 /* LiveViewController.xib in Resources */,
 				ABA628A71CFC7FB1001DC12F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,11 +250,14 @@
 			files = (
 				AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */,
 				ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */,
+				AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */,
 				ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */,
+				AB7E9BD01D28A7A900439BD4 /* LivePlayViewController.swift in Sources */,
 				AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */,
 				ABA6289F1CFC7F6D001DC12F /* VideoCategories.swift in Sources */,
 				ABA628A11CFC7F75001DC12F /* SearchSettings.swift in Sources */,
 				ABA628AB1CFD68E3001DC12F /* HomeViewController.swift in Sources */,
+				AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */,
 				AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */,
 				ABA628A41CFC7F7D001DC12F /* VideoCollectionCell.swift in Sources */,
 			);

@@ -25,7 +25,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "idLivePlay"{
+        if segue.identifier == "idHomePlay"{
             let playViewController = segue.destinationViewController as! PlayViewController
             let details = collectionDataArray[selectedIndex]
             playViewController.videoID = details["videoID"] as! String

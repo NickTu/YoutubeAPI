@@ -12,7 +12,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewTop: NSLayoutConstraint!
-    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet var videoType:String!
     
     var searchSuccessCount = 0
     var successCount = 0
@@ -33,26 +33,30 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
         pageToken = ""
         hasNextPage = false
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
-        view.addSubview(activityIndicator)
         hasNextPage = true
         isScrollSearch = false
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        activityIndicator.frame = CGRect(x: self.view.bounds.width/4, y: 0, width: 50, height: 50)
+        view.addSubview(activityIndicator)
         cleanDataAndStartSearch()
     }
     
     override func viewDidAppear(animated: Bool) {
+        
         super.viewDidAppear(animated)
+        
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    /*override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let playViewController = segue.destinationViewController as! PlayViewController
-        let details = collectionDataArray[keyVideoId[selectedIndex]]!
-        playViewController.videoID = details["videoID"] as! String
+        if segue.identifier == "idLivePlay" {
+            let playViewController = segue.destinationViewController as! PlayViewController
+            let details = collectionDataArray[keyVideoId[selectedIndex]]!
+            playViewController.videoID = details["videoID"] as! String
+        }
         
-    }
+    }*/
     
     func cleanDataAndStartSearch(){
         self.collectionView.scrollEnabled = false
@@ -130,8 +134,13 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        selectedIndex = indexPath.row
-        performSegueWithIdentifier("idLivePlay", sender: self)
+        selectedIndex = indexPath.row        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let liveplayViewController = storyBoard.instantiateViewControllerWithIdentifier("LivePlayViewController") as! LivePlayViewController
+        let details = collectionDataArray[keyVideoId[selectedIndex]]!
+        liveplayViewController.videoID = details["videoID"] as! String
+        presentViewController(liveplayViewController, animated: true, completion: nil)
+        
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
@@ -145,8 +154,16 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         activityIndicator.startAnimating()
         var urlString:String
         var urlStringPageToken:String!
+        var urlStringVideoType:String!
+        
         self.successCount = 0
         self.searchSuccessCount = 0
+        
+        if videoType == nil {
+            urlStringVideoType = ""
+        }else {
+            urlStringVideoType = "&videoCategoryId=\(self.videoType)"
+        }
         
         if self.pageToken.characters.count == 0 {
             urlStringPageToken = ""
@@ -154,7 +171,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
             urlStringPageToken = "&pageToken=\(self.pageToken)"
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&regionCode=TW&eventType=live" + urlStringPageToken
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&eventType=live" + urlStringPageToken + urlStringVideoType
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -167,6 +184,8 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
                     self.searchSuccessCount = items.count
                     
+                    let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject> )["totalResults"]
+                    
                     if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
                         self.hasNextPage = true
                         self.pageToken = resultsDict["nextPageToken"] as! String
@@ -178,10 +197,16 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                         self.pageToken = resultsDict["nextPageToken"] as! String
                     }
                     
+                    print("total count = \(totalCount)")
+                    
                     for i in 0 ..< items.count {
                         let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
                         self.keyVideoId.append( videoId )
                         self.getDetails( videoId )
+                    }
+                    
+                    if items.count == 0 {
+                        self.endSearch()
                     }
                     
                 } catch {
@@ -219,7 +244,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         
         var urlString: String!
         
-        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,liveStreamingDetails&key=\(apiKey)&regionCode=TW&id=\(id)"
+        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,liveStreamingDetails&key=\(apiKey)&id=\(id)"
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -234,7 +259,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                     let items: AnyObject! = resultsDict["items"] as AnyObject!
                     if items.count == 1 {
                         let firstItemDict = (items as! Array<AnyObject>)[0] as! Dictionary<NSObject, AnyObject>
-                        
+                        //print("firstItemDict = \(firstItemDict)")
                         // 取得包含所需資料的 snippet 字典
                         let snippetDict = firstItemDict["snippet"] as! Dictionary<NSObject, AnyObject>
                         

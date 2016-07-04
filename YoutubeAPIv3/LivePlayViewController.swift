@@ -1,14 +1,14 @@
 //
-//  PlayViewController.swift
+//  LivePlayViewController.swift
 //  YoutubeAPIv3
 //
-//  Created by 涂安廷 on 2016/6/9.
+//  Created by 涂安廷 on 2016/7/3.
 //  Copyright © 2016年 涂安廷. All rights reserved.
 //
 
 import UIKit
 
-class PlayViewController: UIViewController {
+class LivePlayViewController: UIViewController {
     
     @IBOutlet weak var playerView: YTPlayerView!
     @IBAction func backViewController(sender: UIBarButtonItem) {
