@@ -1,28 +1,25 @@
 //
-//  LivePlayViewController.swift
+//  PlayListViewController.swift
 //  YoutubeAPIv3
 //
-//  Created by 涂安廷 on 2016/7/3.
+//  Created by 涂安廷 on 2016/7/10.
 //  Copyright © 2016年 涂安廷. All rights reserved.
 //
 
 import UIKit
 
-import UIKit
-
-class LivePlayViewController: UIViewController,YTPlayerViewDelegate {
+class PlayListViewController: UIViewController,YTPlayerViewDelegate {
     
+    @IBOutlet weak var playerView: YTPlayerView!
     @IBAction func backViewController(sender: UIBarButtonItem) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    @IBOutlet weak var playerView: YTPlayerView!
-    
-    var videoLiveID: String!
+    var playlistID: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("videoLiveID = \(videoLiveID)")
+        print("playlistID = \(playlistID)")
         playerView.delegate = self
     }
     
@@ -33,7 +30,7 @@ class LivePlayViewController: UIViewController,YTPlayerViewDelegate {
          
          */
         let parater = ["playsinline":1]
-        playerView.loadWithVideoId(videoLiveID,playerVars: parater)
+        playerView.loadWithPlaylistId(playlistID,playerVars: parater)
     }
     
     override func didReceiveMemoryWarning() {

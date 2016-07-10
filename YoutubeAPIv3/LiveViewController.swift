@@ -138,7 +138,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let liveplayViewController = storyBoard.instantiateViewControllerWithIdentifier("LivePlayViewController") as! LivePlayViewController
         let details = collectionDataArray[keyVideoId[selectedIndex]]!
-        liveplayViewController.videoID = details["videoID"] as! String
+        liveplayViewController.videoLiveID = details["videoID"] as! String
         presentViewController(liveplayViewController, animated: true, completion: nil)
         
     }

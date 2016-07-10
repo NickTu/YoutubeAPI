@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlayViewController: UIViewController {
+class PlayViewController: UIViewController,YTPlayerViewDelegate {
     
     @IBOutlet weak var playerView: YTPlayerView!
     @IBAction func backViewController(sender: UIBarButtonItem) {
@@ -19,19 +19,44 @@ class PlayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(videoID)
-        playerView.loadWithVideoId(videoID)
-        // Do any additional setup after loading the view.
+        print("videoID = \(videoID)")
+        playerView.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        //playerView.loadWithVideoId(videoID)
+        print("viewDidAppear")
+        /* playsinline: 是否在全屏模式下播放
+         
+         */
+        let parater = ["playsinline":1]
+        playerView.loadWithVideoId(videoID,playerVars: parater)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func playerViewDidBecomeReady(playerView: YTPlayerView) {
+        print("playerViewDidBecomeReady")
+        playerView.playVideo()
+    }
+    
+    func playerView(playerView: YTPlayerView, didPlayTime playTime: Float) {
+        //print("playerView didPlayTime")
+    }
+    
+    func playerView(playerView: YTPlayerView, receivedError error: YTPlayerError) {
+        //print("playerView receivedError")
+    }
+    
+    func playerView(playerView: YTPlayerView, didChangeToState state: YTPlayerState) {
+        //print("playerView didChangeToState")
+    }
+    
+    func playerView(playerView: YTPlayerView, didChangeToQuality quality: YTPlaybackQuality) {
+        //print("playerView didChangeToQuality")
     }
     
 }

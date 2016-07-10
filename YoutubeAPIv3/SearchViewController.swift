@@ -67,19 +67,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "idPlaylistItem" {
-            againSearch = false
-            let playlistItemViewController = segue.destinationViewController as! PlaylistItemViewController
-            let details = collectionDataArray[keyVideoId[selectedIndex]]!
-            playlistItemViewController.playlistId = details["playlistID"] as! String
-        } else if segue.identifier == "idSearchPlay"{
-            againSearch = false
-            let playViewController = segue.destinationViewController as! PlayViewController
-            let details = collectionDataArray[keyVideoId[selectedIndex]]!
-            playViewController.videoID = details["videoID"] as! String
-        }else {
-            againSearch = true
-        }
+        againSearch = true
+        
     }
     
     func cleanDataAndStartSearch(){
@@ -179,12 +168,20 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let details = collectionDataArray[keyVideoId[indexPath.row]]!
+        againSearch = false
+        
         if recordSearchSettings.type != "video" {
             selectedIndex = indexPath.row
-            performSegueWithIdentifier("idPlaylistItem", sender: self)
+            let playListViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayListViewController") as! PlayListViewController
+            playListViewController.playlistID = details["playlistID"] as! String
+            presentViewController(playListViewController, animated: true, completion: nil)
         }else {
             selectedIndex = indexPath.row
-            performSegueWithIdentifier("idSearchPlay", sender: self)
+            let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
+            playViewController.videoID = details["videoID"] as! String
+            presentViewController(playViewController, animated: true, completion: nil)
         }
     }
     

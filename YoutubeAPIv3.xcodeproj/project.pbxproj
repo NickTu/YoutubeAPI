@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0346851D249ED700F50CE4 /* LiveViewController.swift */; };
+		AB1EA99A1D32115700A41307 /* PlayListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9991D32115700A41307 /* PlayListViewController.swift */; };
 		AB6100901D0802EA00AB102D /* PlaylistItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */; };
 		AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6100911D09A2DD00AB102D /* PlayViewController.swift */; };
 		AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */; };
@@ -31,6 +32,7 @@
 		1184EAE8DF552CDDEE991422 /* Pods-YoutubeAPIv3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeAPIv3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YoutubeAPIv3/Pods-YoutubeAPIv3.debug.xcconfig"; sourceTree = "<group>"; };
 		5A3078B26B8E096D7A33D136 /* libPods-YoutubeAPIv3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YoutubeAPIv3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0346851D249ED700F50CE4 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
+		AB1EA9991D32115700A41307 /* PlayListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayListViewController.swift; sourceTree = "<group>"; };
 		AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistItemViewController.swift; sourceTree = "<group>"; };
 		AB6100911D09A2DD00AB102D /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAPSPageMenu.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
 				AB61008F1D0802EA00AB102D /* PlaylistItemViewController.swift */,
 				AB6100911D09A2DD00AB102D /* PlayViewController.swift */,
+				AB1EA9991D32115700A41307 /* PlayListViewController.swift */,
 				AB7E9BCF1D28A7A900439BD4 /* LivePlayViewController.swift */,
 				ABA628A81CFC7FC6001DC12F /* Assets.xcassets */,
 				ABA628A61CFC7FB1001DC12F /* Main.storyboard */,
@@ -259,6 +262,7 @@
 				ABA628AB1CFD68E3001DC12F /* HomeViewController.swift in Sources */,
 				AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */,
 				AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */,
+				AB1EA99A1D32115700A41307 /* PlayListViewController.swift in Sources */,
 				ABA628A41CFC7F7D001DC12F /* VideoCollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

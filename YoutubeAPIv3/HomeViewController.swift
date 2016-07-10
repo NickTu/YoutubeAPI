@@ -23,16 +23,6 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     var isScrollSearch:Bool!
     var selectedIndex:Int!
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "idHomePlay"{
-            let playViewController = segue.destinationViewController as! PlayViewController
-            let details = collectionDataArray[selectedIndex]
-            playViewController.videoID = details["videoID"] as! String
-        }
-    }
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
@@ -84,7 +74,11 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         selectedIndex = indexPath.row
-        performSegueWithIdentifier("idHomePlay", sender: self)
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
+        let details = collectionDataArray[indexPath.row]
+        playViewController.videoID = details["videoID"] as! String
+        presentViewController(playViewController, animated: true, completion: nil)
         
     }
     
