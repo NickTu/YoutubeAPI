@@ -54,7 +54,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
         if segue.identifier == "idPlaylistItemPlay"{
             let playViewController = segue.destinationViewController as! PlayViewController
             let details = collectionDataArray[keyVideoId[selectedIndex]]!
-            playViewController.videoID = details["videoID"] as! String
+            playViewController.ID = details["videoID"] as! String
         }
     }
     

@@ -14,14 +14,14 @@ class MainLiveViewController: UIViewController {
     @IBOutlet weak var liveView: UIView!
     var controllerArray: [UIViewController] = []
     let parameters: [CAPSPageMenuOption] = [
-    .ScrollMenuBackgroundColor(UIColor(red: 30.0/255.0, green: 30.0/255.0, blue: 30.0/255.0, alpha: 1.0)),
-    .ViewBackgroundColor(UIColor.whiteColor()),
-    .SelectionIndicatorColor(UIColor.whiteColor()),
-    .BottomMenuHairlineColor(UIColor.whiteColor()),
-    .MenuItemFont(UIFont(name: "HelveticaNeue", size: 13.0)!),
-    .MenuHeight(40.0),
-    .MenuItemWidth(90.0),
-    .CenterMenuItems(true)
+        .ScrollMenuBackgroundColor(UIColor(red: 30.0/255.0, green: 30.0/255.0, blue: 30.0/255.0, alpha: 1.0)),
+        .ViewBackgroundColor(UIColor.whiteColor()),
+        .SelectionIndicatorColor(UIColor.whiteColor()),
+        .BottomMenuHairlineColor(UIColor.whiteColor()),
+        .MenuItemFont(UIFont(name: "HelveticaNeue", size: 13.0)!),
+        .MenuHeight(40.0),
+        .MenuItemWidth(90.0),
+        .CenterMenuItems(true)
     ]
 
     

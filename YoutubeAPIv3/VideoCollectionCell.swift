@@ -18,9 +18,8 @@ class VideoCollectionCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         title.textAlignment = .Center
-        //self.top.constant = thumbnail.frame.size.height
+        viewCount.textAlignment = .Center
     }
     
 }

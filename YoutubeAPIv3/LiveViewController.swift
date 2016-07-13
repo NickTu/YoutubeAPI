@@ -24,7 +24,6 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
-    var selectedIndex:Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,16 +46,6 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         
         
     }
-    
-    /*override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "idLivePlay" {
-            let playViewController = segue.destinationViewController as! PlayViewController
-            let details = collectionDataArray[keyVideoId[selectedIndex]]!
-            playViewController.videoID = details["videoID"] as! String
-        }
-        
-    }*/
     
     func cleanDataAndStartSearch(){
         self.collectionView.scrollEnabled = false
@@ -134,12 +123,12 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        selectedIndex = indexPath.row        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let liveplayViewController = storyBoard.instantiateViewControllerWithIdentifier("LivePlayViewController") as! LivePlayViewController
-        let details = collectionDataArray[keyVideoId[selectedIndex]]!
-        liveplayViewController.videoLiveID = details["videoID"] as! String
-        presentViewController(liveplayViewController, animated: true, completion: nil)
+        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
+        let details = collectionDataArray[keyVideoId[indexPath.row]]!
+        playViewController.type = "video"
+        playViewController.ID = details["videoID"] as! String
+        presentViewController(playViewController, animated: true, completion: nil)
         
     }
     

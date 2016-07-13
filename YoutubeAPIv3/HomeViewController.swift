@@ -21,7 +21,6 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
-    var selectedIndex:Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,11 +72,11 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        selectedIndex = indexPath.row
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
         let details = collectionDataArray[indexPath.row]
-        playViewController.videoID = details["videoID"] as! String
+        playViewController.type = "video"
+        playViewController.ID = details["videoID"] as! String
         presentViewController(playViewController, animated: true, completion: nil)
         
     }
@@ -137,14 +136,12 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let targetURL = NSURL(string: urlString)
         
         performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
-            print("completion 1")
+
             if HTTPStatusCode == 200 && error == nil {
-                print("completion 2")
-                // 將 JSON 資料轉換成字典物件
+
                 do {
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     
-                    // 取得所有的搜尋結果項目（ items 陣列）
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
 
                     if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
@@ -158,7 +155,6 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         self.pageToken = resultsDict["nextPageToken"] as! String
                     }
                     
-                    // 以迴圈迭代處理所有的搜尋結果，並且只保留所需的資料
                     for i in 0 ..< items.count {
                         let snippetDict = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
                         var videoDetailsDict = Dictionary<NSObject, AnyObject>()
@@ -183,9 +179,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         
     }
     
-    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
-        
-        print("performGetRequest")
+    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {        
+
         let request = NSMutableURLRequest(URL: targetURL)
         request.HTTPMethod = "GET"
         
@@ -194,16 +189,12 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let session = NSURLSession(configuration: sessionConfiguration)
         
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            print("dataTaskWithRequest")
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                print("dispatch_async")
                 completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
             })
         })
         
         task.resume()
     }
-    
-    
     
 }

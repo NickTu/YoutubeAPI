@@ -37,7 +37,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
-    var selectedIndex:Int!
     var againSearch:Bool!
     
     override func viewDidLoad() {
@@ -171,18 +170,17 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         againSearch = false
+        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
         
         if recordSearchSettings.type != "video" {
-            selectedIndex = indexPath.row
-            let playListViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayListViewController") as! PlayListViewController
-            playListViewController.playlistID = details["playlistID"] as! String
-            presentViewController(playListViewController, animated: true, completion: nil)
+            playViewController.type = "playlist"
+            playViewController.ID = details["playlistID"] as! String
         }else {
-            selectedIndex = indexPath.row
-            let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
-            playViewController.videoID = details["videoID"] as! String
-            presentViewController(playViewController, animated: true, completion: nil)
+            playViewController.type = "video"
+            playViewController.ID = details["videoID"] as! String
+            
         }
+        presentViewController(playViewController, animated: true, completion: nil)
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
