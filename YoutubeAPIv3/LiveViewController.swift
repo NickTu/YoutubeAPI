@@ -217,6 +217,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfiguration.timeoutIntervalForResource = 10
         
         let session = NSURLSession(configuration: sessionConfiguration)
         

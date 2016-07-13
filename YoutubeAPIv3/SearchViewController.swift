@@ -310,6 +310,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfiguration.timeoutIntervalForResource = 10
         
         let session = NSURLSession(configuration: sessionConfiguration)
         

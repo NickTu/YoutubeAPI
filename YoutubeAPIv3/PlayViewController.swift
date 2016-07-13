@@ -234,7 +234,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                 
             }else {
                 print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel videos: \(error)")
+                self.endSearch()
+                if self.type == "video" {
+                    print("Error while loading video details: \(error)")
+                } else {
+                    print("Error while loading playlist details: \(error)")
+                }
             }
             
         })
@@ -247,6 +252,8 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        sessionConfiguration.timeoutIntervalForResource = 10
         
         let session = NSURLSession(configuration: sessionConfiguration)
         
@@ -308,8 +315,15 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                 }
                 
             } else {
+                
                 print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel details: \(error)")
+                self.endSearch()
+                if self.type == "video" {
+                    print("Error while loading video details: \(error)")
+                } else {
+                    print("Error while loading playlist details: \(error)")
+                }
+                
             }
             
         })

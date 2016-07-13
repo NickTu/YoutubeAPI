@@ -185,6 +185,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfiguration.timeoutIntervalForResource = 10
         
         let session = NSURLSession(configuration: sessionConfiguration)
         
