@@ -44,7 +44,6 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         
         super.viewDidAppear(animated)
         
-        
     }
     
     func cleanDataAndStartSearch(){
@@ -88,6 +87,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("idVideoCollectionCell", forIndexPath: indexPath) as! VideoCollectionCell
         let title = cell.title as UILabel
+        let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let count = cell.viewCount as UILabel
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
@@ -96,19 +96,27 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
             title.text = "No title"
         }else {
             title.text = details["title"] as? String
-        }
-        
+        }        
         if details["concurrentViewers"] == nil {
             count.text = "No concurrentViewers"
         } else {
             count.text = "concurrentViewers = " + (details["concurrentViewers"] as? String)!
         }
-        
         if details["thumbnail"] == nil {
             thumbnail.image = UIImage(named: "NoImage")
         } else {
             thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
         }
+        if details["channelTitle"] == nil {
+            channelTitle.text = "No channelTitle"
+        }else {
+            channelTitle.text = details["channelTitle"] as? String
+        }
+        
+        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
+        title.frame.size = CGSizeMake(cell.frame.size.width, height)
+        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
+        count.frame.size = CGSizeMake(cell.frame.size.width, height)
         
         return cell
     }
@@ -117,8 +125,8 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         return UIEdgeInsetsMake(0, 0, 0, 0);
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(collectionView.frame.width/2-5, collectionView.frame.height/3)
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {        
+        return CGSizeMake(collectionView.frame.width/2-5, recordSearchSettings.liveViewHeight/3)
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -256,6 +264,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                         // 建立新的字典，只儲存我們想要知道的數值
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
+                        videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["concurrentViewers"] = (firstItemDict["liveStreamingDetails"] as! Dictionary<NSObject, AnyObject>)["concurrentViewers"]
                         

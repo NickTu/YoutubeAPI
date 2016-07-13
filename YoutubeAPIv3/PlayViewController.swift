@@ -158,7 +158,8 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         
         let cell = tableView.dequeueReusableCellWithIdentifier("idRelatedToVideoTableViewCell", forIndexPath: indexPath) as! relatedToVideoTableViewCell
         let title = cell.title as UILabel
-        let thumbnail = cell.thumbnail as UIImageView
+        let channelTitle = cell.channelTitle as UILabel
+        let thumbnail = cell.thumbnail as UIImageView        
         let viewCount = cell.viewCount as UILabel
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
         
@@ -179,8 +180,16 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         } else {
             thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
         }
+        if details["channelTitle"] == nil {
+            channelTitle.text = "No channelTitle"
+        }else {
+            channelTitle.text = details["channelTitle"] as? String
+        }
         
-        cell.titleHeight.constant = tableView.frame.size.height/8
+        cell.titleHeight.constant = tableView.frame.size.height/12
+        cell.channelTitleHeight.constant = tableView.frame.size.height/12
+        cell.viewCountHeight.constant = tableView.frame.size.height/12
+        
         
         return cell
     }
@@ -307,6 +316,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                         // 建立新的字典，只儲存我們想要知道的數值
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
+                        videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["viewCount"] = (firstItemDict["statistics"] as! Dictionary<NSObject, AnyObject>)["viewCount"]
                         

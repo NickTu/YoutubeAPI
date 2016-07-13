@@ -12,14 +12,19 @@ import UIKit
 class VideoCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var thumbnail: UIImageView!
-    @IBOutlet weak var title: UILabel!  
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var channelTitle: UILabel!
     @IBOutlet weak var viewCount: UILabel!
-    //@IBOutlet weak var top: NSLayoutConstraint!
+    @IBOutlet weak var titleHeight: NSLayoutConstraint!
+    @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!
+    @IBOutlet weak var viewCountHeight: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        title.textAlignment = .Center
-        viewCount.textAlignment = .Center
+        thumbnail.contentMode = .ScaleToFill
+        title.textAlignment = .Left
+        channelTitle.textAlignment = .Left
+        viewCount.textAlignment = .Left
     }
     
 }

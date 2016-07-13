@@ -88,27 +88,43 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("idVideoCollectionCell", forIndexPath: indexPath) as! VideoCollectionCell
         let title = cell.title as UILabel
+        let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let viewCount = cell.viewCount as UILabel
         let details = collectionDataArray[indexPath.row]
+        
+        title.sizeToFit()
+        channelTitle.sizeToFit()
+        viewCount.sizeToFit()
+        /*title.adjustsFontSizeToFitWidth = true
+        channelTitle.adjustsFontSizeToFitWidth = true
+        viewCount.adjustsFontSizeToFitWidth = true*/
         
         if details["title"] == nil {
             title.text = "No title"
         }else {
             title.text = details["title"] as? String
-        }
-        
+        }        
         if details["viewCount"] == nil {
             viewCount.text = "No viewCount"
         } else {
             viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
         }
-        
         if details["thumbnail"] == nil {
             thumbnail.image = UIImage(named: "NoImage")
         } else {
             thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
         }
+        if details["channelTitle"] == nil {
+            channelTitle.text = "No channelTitle"
+        }else {
+            channelTitle.text = details["channelTitle"] as? String
+        }
+        
+        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
+        title.frame.size = CGSizeMake(cell.frame.size.width, height)
+        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
+        viewCount.frame.size = CGSizeMake(cell.frame.size.width, height)
 
         return cell
     }
@@ -159,6 +175,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         let snippetDict = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
                         var videoDetailsDict = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
+                        videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["viewCount"] = items[i]["statistics"]!["viewCount"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["videoID"] = items[i]["id"] as! String

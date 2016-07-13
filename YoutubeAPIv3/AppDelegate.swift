@@ -16,6 +16,7 @@ struct recordSearchSettings {
     static var videoDimension:String! = "any"
     static var videoDefinition:String! = "any"
     static var videoType:String! = "All"
+    static var liveViewHeight:CGFloat! = 0
 }
 
 @UIApplicationMain

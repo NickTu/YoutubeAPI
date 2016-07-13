@@ -130,29 +130,38 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("idVideoCollectionCell", forIndexPath: indexPath) as! VideoCollectionCell
         let title = cell.title as UILabel
+        let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let count = cell.viewCount as UILabel
-        let details = collectionDataArray[keyVideoId[indexPath.row]]!
+        let details = collectionDataArray[keyVideoId[indexPath.row]]!        
         
         if details["title"] == nil {
             title.text = ""
         }else {
             title.text = details["title"] as? String
 
-        }
-        
+        }        
         if recordSearchSettings.type == "playlist" {
             count.text = "itemCount = " + String(details["itemCount"]!)
         }else {
             count.text = "viewCount = " + (details["viewCount"] as? String)!
-
         }
-        
         if details["thumbnail"] == nil {
             thumbnail.image = UIImage(named: "NoImage")
         } else {
             thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
         }
+        if details["channelTitle"] == nil {
+            channelTitle.text = "No channelTitle"
+        }else {
+            channelTitle.text = details["channelTitle"] as? String
+        }
+        
+        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
+        cell.titleHeight.constant = height
+        cell.channelTitleHeight.constant = height
+        cell.viewCountHeight.constant = height
+
         
         return cell
     }
@@ -372,6 +381,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         // 建立新的字典，只儲存我們想要知道的數值
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
+                        videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
                         

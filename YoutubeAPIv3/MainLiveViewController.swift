@@ -48,11 +48,11 @@ class MainLiveViewController: UIViewController {
         controller4.videoType = "10" // Music
         controllerArray.append(controller4)
         
-        
     }
     
     override func viewDidAppear(animated: Bool) {
         
+        recordSearchSettings.liveViewHeight = liveView.frame.height
         super.viewDidAppear(animated)
         if pageMenu == nil {
             pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height), pageMenuOptions: parameters)
