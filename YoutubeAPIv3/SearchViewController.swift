@@ -257,7 +257,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             urlStringPageToken = "&pageToken=\(self.pageToken)"
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)&regionCode=TW" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime + urlStringPageToken
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -350,7 +350,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             part = "statistics"
         }
 
-        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&regionCode=TW&id=\(id)" + urlStringVideoCategoryId
+        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&id=\(id)" + urlStringVideoCategoryId
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         

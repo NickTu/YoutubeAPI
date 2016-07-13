@@ -89,6 +89,7 @@ class PlaylistItemViewController: UIViewController,UICollectionViewDelegate,UICo
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         selectedIndex = indexPath.row
+        
         performSegueWithIdentifier("idPlaylistItemPlay", sender: self)
     }
     

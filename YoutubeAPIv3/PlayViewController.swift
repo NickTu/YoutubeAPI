@@ -188,6 +188,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     func search(){
         
         var urlStringPageToken:String!
+        var urlString:String!
         
         if self.pageToken.characters.count > 0 {
             urlStringPageToken = "&pageToken=\(self.pageToken)"
@@ -197,7 +198,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         self.successCount = 0
         self.searchSuccessCount = 0
         
-        var urlString = youtubeNetworkAddress + "search?&part=snippet&type=video&maxResults=50&key=\(apiKey)" + urlStringPageToken + "&relatedToVideoId=\(ID)"
+        if type == "video" {
+            urlString = youtubeNetworkAddress + "search?&part=snippet&type=video&maxResults=50&key=\(apiKey)" + urlStringPageToken + "&relatedToVideoId=\(ID)"
+        } else {
+            urlString = youtubeNetworkAddress + "playlistItems?&part=snippet&maxResults=50&key=\(apiKey)&playlistId=\(ID)" + urlStringPageToken
+        }
+        
         print("urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
@@ -223,7 +229,14 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                     }
                     
                     for i in 0 ..< items.count {
-                        let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ "videoId"] as! String
+                        
+                        let videoId:String!
+                        if self.type == "video" {
+                            videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ "videoId"] as! String
+                        } else {
+                            let snippet = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
+                            videoId = (snippet["resourceId"] as! Dictionary<NSObject, AnyObject>)[ "videoId"] as! String
+                        }
                         self.keyVideoId.append( videoId )
                         self.getVideoDetails( videoId )
                     }
@@ -272,7 +285,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         
         var urlString: String!
         
-        urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&key=\(apiKey)&regionCode=TW&id=\(id)"
+        urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&key=\(apiKey)&id=\(id)"
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
