@@ -380,10 +380,10 @@
             </objects>
             <point key="canvasLocation" x="-40" y="876"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Main Tabbar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                <tabBarController id="49e-Tb-3d3" customClass="MainTabbarController" customModule="YoutubeAPIv3" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="dKn-jR-Arw"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">

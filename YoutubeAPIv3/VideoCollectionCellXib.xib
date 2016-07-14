@@ -16,9 +16,6 @@
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bqr-6A-7Qw">
                         <rect key="frame" x="0.0" y="0.0" width="130" height="90"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="90" id="7Jd-Hp-OEr"/>
-                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QT5-17-Yud">
                         <rect key="frame" x="0.0" y="90" width="130" height="20"/>
@@ -67,6 +64,7 @@
                 <constraint firstAttribute="trailing" secondItem="Nii-uG-stU" secondAttribute="trailing" id="Kk6-uh-QIU"/>
                 <constraint firstItem="Nii-uG-stU" firstAttribute="leading" secondItem="Tmc-3E-Ven" secondAttribute="leading" id="MCq-CS-7SG"/>
                 <constraint firstItem="Nii-uG-stU" firstAttribute="top" secondItem="ON4-tr-4EC" secondAttribute="bottom" id="O6e-0H-KFI"/>
+                <constraint firstItem="Bqr-6A-7Qw" firstAttribute="top" secondItem="Tmc-3E-Ven" secondAttribute="top" id="RMV-rV-JR4"/>
                 <constraint firstItem="Nii-uG-stU" firstAttribute="trailing" secondItem="QT5-17-Yud" secondAttribute="trailing" id="Rgb-gh-yLj"/>
                 <constraint firstItem="hXc-Ed-efD" firstAttribute="bottom" secondItem="Bqr-6A-7Qw" secondAttribute="bottom" constant="-5" id="WiT-YA-16B"/>
                 <constraint firstItem="QT5-17-Yud" firstAttribute="top" secondItem="Bqr-6A-7Qw" secondAttribute="bottom" id="YTY-X8-xhP"/>

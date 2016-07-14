@@ -37,7 +37,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
-    var againSearch:Bool!
+    var againSearch:Bool! = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +49,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         searchViewConstraint.constant = 0
         pageToken = ""
         hasNextPage = false
-        againSearch = true
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -57,7 +56,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: searchBar.frame.size.height + navigationBar.frame.size.height + 20, width: 50, height: 50)
         view.addSubview(activityIndicator)
-        hasNextPage = true
         isScrollSearch = false
         if searchBar.text?.characters.count > 0 && againSearch{
             cleanDataAndStartSearch()
@@ -456,8 +454,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                             videoDetailsDict["videoID"] = id
                             videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String
                         }
-                        
-                        
                         
                         self.collectionDataArray[ id ] = videoDetailsDict
                         

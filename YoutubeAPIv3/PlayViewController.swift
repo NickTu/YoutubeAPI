@@ -160,7 +160,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         let title = cell.title as UILabel
         let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
-        //let videoLength = cell.videoLength as UILabel
+        let videoLength = cell.videoLength as UILabel
         let viewCount = cell.viewCount as UILabel
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
         
@@ -186,8 +186,8 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         }else {
             channelTitle.text = details["channelTitle"] as? String
         }
-        /*if details["duration"] == nil {
-            videoLength.text = "No time"
+        if details["duration"] == nil {
+            videoLength.text = ""
         }else {
             
             var patternString = details["duration"] as? String
@@ -250,12 +250,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
             }
             
             videoLength.text = patternString
-        }*/
+        }
         
-        cell.titleHeight.constant = tableView.frame.size.height/12
-        cell.channelTitleHeight.constant = tableView.frame.size.height/12
-        cell.viewCountHeight.constant = tableView.frame.size.height/12
-        
+        let height = tableView.frame.size.height/12
+        title.frame.size = CGSizeMake(cell.frame.size.width, height)
+        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
+        viewCount.frame.size = CGSizeMake(cell.frame.size.width, height)
         
         return cell
     }
@@ -360,7 +360,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         
         var urlString: String!
         
-        urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&key=\(apiKey)&id=\(id)"
+        urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&key=\(apiKey)&id=\(id)"
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -375,18 +375,16 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                     let items: AnyObject! = resultsDict["items"] as AnyObject!
                     if items.count == 1 {
                         let firstItemDict = (items as! Array<AnyObject>)[0] as! Dictionary<NSObject, AnyObject>
-                        //print("firstItemDict = \(firstItemDict)")
-                        // 取得包含所需資料的 snippet 字典
                         let snippetDict = firstItemDict["snippet"] as! Dictionary<NSObject, AnyObject>
-                        
-                        // 建立新的字典，只儲存我們想要知道的數值
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
+                        let contentDetailsDict = firstItemDict["contentDetails"] as! Dictionary<NSObject, AnyObject>
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["medium"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["viewCount"] = (firstItemDict["statistics"] as! Dictionary<NSObject, AnyObject>)["viewCount"]
                         
                         videoDetailsDict["videoID"] = id
+                        videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String
                         
                         self.tableViewDataArray[ id ] = videoDetailsDict
                         

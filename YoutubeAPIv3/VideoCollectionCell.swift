@@ -16,9 +16,6 @@ class VideoCollectionCell: UICollectionViewCell {
     @IBOutlet weak var channelTitle: UILabel!
     @IBOutlet weak var viewCount: UILabel!
     @IBOutlet weak var videoLength: UILabel!
-    @IBOutlet weak var titleHeight: NSLayoutConstraint!
-    @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!
-    @IBOutlet weak var viewCountHeight: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
