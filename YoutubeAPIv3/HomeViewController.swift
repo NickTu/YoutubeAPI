@@ -8,6 +8,25 @@
 
 import UIKit
 
+extension String {
+    func matchPattern(patternStr:String)->Bool {
+        var isMatch:Bool = false
+        do {
+            let regex = try NSRegularExpression(pattern: patternStr, options: [.CaseInsensitive])
+            let result = regex.firstMatchInString(self, options: NSMatchingOptions(rawValue: 0), range: NSMakeRange(0, characters.count))
+            
+            if (result != nil)
+            {
+                isMatch = true
+            }
+        }
+        catch {
+            isMatch = false
+        }
+        return isMatch
+    }
+}
+
 class HomeViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIScrollViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -91,14 +110,12 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let viewCount = cell.viewCount as UILabel
+        let videoLength = cell.videoLength as UILabel
         let details = collectionDataArray[indexPath.row]
         
         title.sizeToFit()
         channelTitle.sizeToFit()
         viewCount.sizeToFit()
-        /*title.adjustsFontSizeToFitWidth = true
-        channelTitle.adjustsFontSizeToFitWidth = true
-        viewCount.adjustsFontSizeToFitWidth = true*/
         
         if details["title"] == nil {
             title.text = "No title"
@@ -119,6 +136,71 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             channelTitle.text = "No channelTitle"
         }else {
             channelTitle.text = details["channelTitle"] as? String
+        }
+        if details["duration"] == nil {
+            videoLength.text = ""
+        }else {
+            
+            var patternString = details["duration"] as? String
+            patternString = (patternString! as NSString).substringFromIndex(2)
+            patternString = (patternString! as NSString).substringToIndex((patternString?.characters.count)! - 1)
+            if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == true) {
+                
+                var patternStringArray = patternString?.componentsSeparatedByString("H")
+                let hour = patternStringArray!.first
+                patternStringArray = patternStringArray!.last!.componentsSeparatedByString("M")
+                var minute = patternStringArray!.first
+                var sec = patternStringArray!.last
+                
+                if minute?.characters.count == 1 {
+                    minute = "0" + minute!
+                }
+                if sec?.characters.count == 1 {
+                    sec = "0" + sec!
+                }
+                
+                patternString = hour! + ":" + minute! + ":" + sec!
+                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + minute! + ":" + sec!)")
+                
+            } else if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == false) {
+                
+                let patternStringArray = patternString!.componentsSeparatedByString("M")
+                
+                if patternStringArray.count == 1 {
+                    
+                    patternString = patternStringArray.first! + ":00"
+                    //print("indexPath.row = \(indexPath.row) patternString = \(patternStringArray.first! + ":00")")
+                    
+                }else {
+                
+                    let minute = patternStringArray.first
+                    var sec = patternStringArray.last
+                
+                    if sec?.characters.count == 1 {
+                        sec = "0" + sec!
+                    }
+                    
+                    patternString = minute! + ":" + sec!
+                    //print("indexPath.row = \(indexPath.row) patternString = \(minute! + ":" + sec!)")
+                }
+                
+            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == true) {
+                
+                let patternStringArray = patternString!.componentsSeparatedByString("H")
+                let hour = patternStringArray.first
+                let sec = patternStringArray.last
+                
+                patternString = hour! + ":" + sec!
+                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + sec!)")
+                
+            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == false) {
+                
+                patternString = "00:" + patternString!
+                //print("indexPath.row = \(indexPath.row) patternString = \("00:" + patternString!)")
+                
+            }          
+            
+            videoLength.text = patternString
         }
         
         let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
@@ -147,7 +229,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             urlStringPageToken = ""
         }
         
-        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics&chart=mostPopular&maxResults=50&key=\(apiKey)" + urlStringPageToken
+        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50&key=\(apiKey)" + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -173,12 +255,14 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     
                     for i in 0 ..< items.count {
                         let snippetDict = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
+                        let contentDetailsDict = items[i]["contentDetails"] as! Dictionary<NSObject, AnyObject>
                         var videoDetailsDict = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["viewCount"] = items[i]["statistics"]!["viewCount"]
-                        videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
+                        videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["medium"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["videoID"] = items[i]["id"] as! String
+                        videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String
                         
                         self.collectionDataArray.append(videoDetailsDict)
                     }

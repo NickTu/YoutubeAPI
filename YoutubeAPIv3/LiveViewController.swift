@@ -89,6 +89,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         let title = cell.title as UILabel
         let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
+        let videoLength = cell.videoLength as UILabel
         let count = cell.viewCount as UILabel
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         
@@ -111,6 +112,71 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
             channelTitle.text = "No channelTitle"
         }else {
             channelTitle.text = details["channelTitle"] as? String
+        }
+        if details["duration"] == nil {
+            videoLength.text = ""
+        }else {
+            
+            var patternString = details["duration"] as? String
+            patternString = (patternString! as NSString).substringFromIndex(2)
+            patternString = (patternString! as NSString).substringToIndex((patternString?.characters.count)! - 1)
+            if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == true) {
+                
+                var patternStringArray = patternString?.componentsSeparatedByString("H")
+                let hour = patternStringArray!.first
+                patternStringArray = patternStringArray!.last!.componentsSeparatedByString("M")
+                var minute = patternStringArray!.first
+                var sec = patternStringArray!.last
+                
+                if minute?.characters.count == 1 {
+                    minute = "0" + minute!
+                }
+                if sec?.characters.count == 1 {
+                    sec = "0" + sec!
+                }
+                
+                patternString = hour! + ":" + minute! + ":" + sec!
+                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + minute! + ":" + sec!)")
+                
+            } else if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == false) {
+                
+                let patternStringArray = patternString!.componentsSeparatedByString("M")
+                
+                if patternStringArray.count == 1 {
+                    
+                    patternString = patternStringArray.first! + ":00"
+                    //print("indexPath.row = \(indexPath.row) patternString = \(patternStringArray.first! + ":00")")
+                    
+                }else {
+                    
+                    let minute = patternStringArray.first
+                    var sec = patternStringArray.last
+                    
+                    if sec?.characters.count == 1 {
+                        sec = "0" + sec!
+                    }
+                    
+                    patternString = minute! + ":" + sec!
+                    //print("indexPath.row = \(indexPath.row) patternString = \(minute! + ":" + sec!)")
+                }
+                
+            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == true) {
+                
+                let patternStringArray = patternString!.componentsSeparatedByString("H")
+                let hour = patternStringArray.first
+                let sec = patternStringArray.last
+                
+                patternString = hour! + ":" + sec!
+                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + sec!)")
+                
+            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == false) {
+                
+                patternString = "00:" + patternString!
+                //print("indexPath.row = \(indexPath.row) patternString = \("00:" + patternString!)")
+                
+            }
+            
+            videoLength.text = patternString
         }
         
         let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
@@ -265,7 +331,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                         var videoDetailsDict: Dictionary<NSObject, AnyObject> = Dictionary<NSObject, AnyObject>()
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
-                        videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
+                        videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["medium"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["concurrentViewers"] = (firstItemDict["liveStreamingDetails"] as! Dictionary<NSObject, AnyObject>)["concurrentViewers"]
                         
                         videoDetailsDict["videoID"] = id

@@ -15,6 +15,7 @@ class VideoCollectionCell: UICollectionViewCell {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var channelTitle: UILabel!
     @IBOutlet weak var viewCount: UILabel!
+    @IBOutlet weak var videoLength: UILabel!
     @IBOutlet weak var titleHeight: NSLayoutConstraint!
     @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!
     @IBOutlet weak var viewCountHeight: NSLayoutConstraint!
@@ -25,6 +26,10 @@ class VideoCollectionCell: UICollectionViewCell {
         title.textAlignment = .Left
         channelTitle.textAlignment = .Left
         viewCount.textAlignment = .Left
+        videoLength.layer.borderColor = UIColor.blackColor().CGColor
+        videoLength.layer.borderWidth = 1.0
+        videoLength.backgroundColor = UIColor.blackColor()
+        videoLength.textColor = UIColor.whiteColor()
     }
     
 }
