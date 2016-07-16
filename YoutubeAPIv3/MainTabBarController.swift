@@ -15,7 +15,7 @@ class MainTabbarController:UITabBarController,UITabBarControllerDelegate{
     }
     
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
-        //print("didSelectViewController")
+        
         if viewController.isKindOfClass(SearchViewController) {
             (viewController as! SearchViewController).againSearch = false
         }

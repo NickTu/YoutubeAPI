@@ -16,7 +16,7 @@ class MainLiveViewController: UIViewController {
     let parameters: [CAPSPageMenuOption] = [
         .ScrollMenuBackgroundColor(UIColor(red: 30.0/255.0, green: 30.0/255.0, blue: 30.0/255.0, alpha: 1.0)),
         .ViewBackgroundColor(UIColor.whiteColor()),
-        .SelectionIndicatorColor(UIColor.whiteColor()),
+        .SelectionIndicatorColor(UIColor.blackColor()),
         .BottomMenuHairlineColor(UIColor.whiteColor()),
         .MenuItemFont(UIFont(name: "HelveticaNeue", size: 13.0)!),
         .MenuHeight(40.0),

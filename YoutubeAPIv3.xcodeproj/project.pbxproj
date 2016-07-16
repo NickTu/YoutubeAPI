@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0346851D249ED700F50CE4 /* LiveViewController.swift */; };
+		AB1C15B11D3A262000CFEBD6 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1C15B01D3A262000CFEBD6 /* CustomLabel.swift */; };
 		AB1EA99C1D323D0700A41307 /* relatedToVideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */; };
 		AB1EA99E1D323D2E00A41307 /* relatedToVideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */; };
 		AB1EA9A41D37D17B00A41307 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */; };
+		AB1EA9A61D380FA800A41307 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9A51D380FA800A41307 /* CommonFunction.swift */; };
 		AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6100911D09A2DD00AB102D /* PlayViewController.swift */; };
 		AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */; };
 		AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */; };
@@ -32,9 +34,11 @@
 		1184EAE8DF552CDDEE991422 /* Pods-YoutubeAPIv3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YoutubeAPIv3.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YoutubeAPIv3/Pods-YoutubeAPIv3.debug.xcconfig"; sourceTree = "<group>"; };
 		5A3078B26B8E096D7A33D136 /* libPods-YoutubeAPIv3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YoutubeAPIv3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0346851D249ED700F50CE4 /* LiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
+		AB1C15B01D3A262000CFEBD6 /* CustomLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = relatedToVideoTableViewCell.swift; sourceTree = "<group>"; };
 		AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = relatedToVideoTableViewCell.xib; sourceTree = "<group>"; };
 		AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		AB1EA9A51D380FA800A41307 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonFunction.swift; sourceTree = "<group>"; };
 		AB6100911D09A2DD00AB102D /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAPSPageMenu.swift; sourceTree = "<group>"; };
 		AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLiveViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			children = (
 				AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */,
 				AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */,
+				AB1EA9A51D380FA800A41307 /* CommonFunction.swift */,
 				ABA628881CFC7F39001DC12F /* AppDelegate.swift */,
 				ABA628AA1CFD68E3001DC12F /* HomeViewController.swift */,
 				ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */,
@@ -119,6 +124,7 @@
 				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
 				AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */,
 				AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */,
+				AB1C15B01D3A262000CFEBD6 /* CustomLabel.swift */,
 				ABA628861CFC7F39001DC12F /* Products */,
 				ABA628A81CFC7FC6001DC12F /* Assets.xcassets */,
 				ABA628A61CFC7FB1001DC12F /* Main.storyboard */,
@@ -256,11 +262,13 @@
 				AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */,
 				ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */,
 				AB1EA9A41D37D17B00A41307 /* MainTabBarController.swift in Sources */,
+				AB1C15B11D3A262000CFEBD6 /* CustomLabel.swift in Sources */,
 				AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */,
 				ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */,
 				ABA6289F1CFC7F6D001DC12F /* VideoCategories.swift in Sources */,
 				ABA628A11CFC7F75001DC12F /* SearchSettings.swift in Sources */,
 				ABA628AB1CFD68E3001DC12F /* HomeViewController.swift in Sources */,
+				AB1EA9A61D380FA800A41307 /* CommonFunction.swift in Sources */,
 				AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */,
 				AB1EA99C1D323D0700A41307 /* relatedToVideoTableViewCell.swift in Sources */,
 				AB0346861D249ED700F50CE4 /* LiveViewController.swift in Sources */,

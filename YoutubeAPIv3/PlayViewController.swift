@@ -39,6 +39,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         pageToken = ""
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .None
         tableView.registerNib(UINib(nibName: "relatedToVideoTableViewCell",bundle: nil), forCellReuseIdentifier: "idRelatedToVideoTableViewCell")
     }
     
@@ -157,100 +158,20 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("idRelatedToVideoTableViewCell", forIndexPath: indexPath) as! relatedToVideoTableViewCell
-        let title = cell.title as UILabel
-        let channelTitle = cell.channelTitle as UILabel
+        let title = cell.title as CustomLabel
+        let channelTitle = cell.channelTitle as CustomLabel
         let thumbnail = cell.thumbnail as UIImageView
         let videoLength = cell.videoLength as UILabel
-        let viewCount = cell.viewCount as UILabel
+        let viewCount = cell.viewCount as CustomLabel
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
-        
-        if details["title"] == nil {
-            title.text = "No title"
-        }else {
-            title.text = details["title"] as? String
-        }
         
         if details["viewCount"] == nil {
             viewCount.text = "No viewCount"
         } else {
             viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
         }
-        
-        if details["thumbnail"] == nil {
-            thumbnail.image = UIImage(named: "NoImage")
-        } else {
-            thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
-        }
-        if details["channelTitle"] == nil {
-            channelTitle.text = "No channelTitle"
-        }else {
-            channelTitle.text = details["channelTitle"] as? String
-        }
-        if details["duration"] == nil {
-            videoLength.text = ""
-        }else {
-            
-            var patternString = details["duration"] as? String
-            patternString = (patternString! as NSString).substringFromIndex(2)
-            patternString = (patternString! as NSString).substringToIndex((patternString?.characters.count)! - 1)
-            if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == true) {
-                
-                var patternStringArray = patternString?.componentsSeparatedByString("H")
-                let hour = patternStringArray!.first
-                patternStringArray = patternStringArray!.last!.componentsSeparatedByString("M")
-                var minute = patternStringArray!.first
-                var sec = patternStringArray!.last
-                
-                if minute?.characters.count == 1 {
-                    minute = "0" + minute!
-                }
-                if sec?.characters.count == 1 {
-                    sec = "0" + sec!
-                }
-                
-                patternString = hour! + ":" + minute! + ":" + sec!
-                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + minute! + ":" + sec!)")
-                
-            } else if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == false) {
-                
-                let patternStringArray = patternString!.componentsSeparatedByString("M")
-                
-                if patternStringArray.count == 1 {
-                    
-                    patternString = patternStringArray.first! + ":00"
-                    //print("indexPath.row = \(indexPath.row) patternString = \(patternStringArray.first! + ":00")")
-                    
-                }else {
-                    
-                    let minute = patternStringArray.first
-                    var sec = patternStringArray.last
-                    
-                    if sec?.characters.count == 1 {
-                        sec = "0" + sec!
-                    }
-                    
-                    patternString = minute! + ":" + sec!
-                    //print("indexPath.row = \(indexPath.row) patternString = \(minute! + ":" + sec!)")
-                }
-                
-            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == true) {
-                
-                let patternStringArray = patternString!.componentsSeparatedByString("H")
-                let hour = patternStringArray.first
-                let sec = patternStringArray.last
-                
-                patternString = hour! + ":" + sec!
-                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + sec!)")
-                
-            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == false) {
-                
-                patternString = "00:" + patternString!
-                //print("indexPath.row = \(indexPath.row) patternString = \("00:" + patternString!)")
-                
-            }
-            
-            videoLength.text = patternString
-        }
+
+        CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)        
         
         let height = tableView.frame.size.height/12
         title.frame.size = CGSizeMake(cell.frame.size.width, height)
@@ -283,7 +204,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
-        performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+        CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
 
             if HTTPStatusCode == 200 && error == nil {
 
@@ -334,28 +255,6 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         
     }
     
-    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
-        
-        let request = NSMutableURLRequest(URL: targetURL)
-        request.HTTPMethod = "GET"
-        
-        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        sessionConfiguration.timeoutIntervalForResource = 10
-        
-        let session = NSURLSession(configuration: sessionConfiguration)
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-
-                completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
-            })
-        })
-        
-        task.resume()
-    }
-    
     func getVideoDetails(id: String) {
         
         var urlString: String!
@@ -364,7 +263,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
-        performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+        CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
             
             if HTTPStatusCode == 200 && error == nil {
                 

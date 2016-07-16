@@ -134,108 +134,42 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let count = cell.viewCount as UILabel
         let details = collectionDataArray[keyVideoId[indexPath.row]]!        
         
-        if details["title"] == nil {
-            title.text = ""
-        }else {
-            title.text = details["title"] as? String
-
-        }        
+        count.sizeToFit()
+        count.textAlignment = .Left
         if recordSearchSettings.type == "playlist" {
             count.text = "itemCount = " + String(details["itemCount"]!)
         }else {
             count.text = "viewCount = " + (details["viewCount"] as? String)!
         }
-        if details["thumbnail"] == nil {
-            thumbnail.image = UIImage(named: "NoImage")
-        } else {
-            thumbnail.image = UIImage(data: NSData(contentsOfURL: NSURL(string: (details["thumbnail"] as? String)!)!)!)
-        }
-        if details["channelTitle"] == nil {
-            channelTitle.text = "No channelTitle"
-        }else {
-            channelTitle.text = details["channelTitle"] as? String
-        }
-        if details["duration"] == nil {
-            videoLength.text = ""
-        }else {
-            
-            var patternString = details["duration"] as? String
-            patternString = (patternString! as NSString).substringFromIndex(2)
-            patternString = (patternString! as NSString).substringToIndex((patternString?.characters.count)! - 1)
-            if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == true) {
-                
-                var patternStringArray = patternString?.componentsSeparatedByString("H")
-                let hour = patternStringArray!.first
-                patternStringArray = patternStringArray!.last!.componentsSeparatedByString("M")
-                var minute = patternStringArray!.first
-                var sec = patternStringArray!.last
-                
-                if minute?.characters.count == 1 {
-                    minute = "0" + minute!
-                }
-                if sec?.characters.count == 1 {
-                    sec = "0" + sec!
-                }
-                
-                patternString = hour! + ":" + minute! + ":" + sec!
-                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + minute! + ":" + sec!)")
-                
-            } else if (patternString?.containsString("M") == true) && (patternString?.containsString("H") == false) {
-                
-                let patternStringArray = patternString!.componentsSeparatedByString("M")
-                
-                if patternStringArray.count == 1 {
-                    
-                    patternString = patternStringArray.first! + ":00"
-                    //print("indexPath.row = \(indexPath.row) patternString = \(patternStringArray.first! + ":00")")
-                    
-                }else {
-                    
-                    let minute = patternStringArray.first
-                    var sec = patternStringArray.last
-                    
-                    if sec?.characters.count == 1 {
-                        sec = "0" + sec!
-                    }
-                    
-                    patternString = minute! + ":" + sec!
-                    //print("indexPath.row = \(indexPath.row) patternString = \(minute! + ":" + sec!)")
-                }
-                
-            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == true) {
-                
-                let patternStringArray = patternString!.componentsSeparatedByString("H")
-                let hour = patternStringArray.first
-                let sec = patternStringArray.last
-                
-                patternString = hour! + ":" + sec!
-                //print("indexPath.row = \(indexPath.row) patternString = \(hour! + ":" + sec!)")
-                
-            } else if (patternString?.containsString("M") == false) && (patternString?.containsString("H") == false) {
-                
-                patternString = "00:" + patternString!
-                //print("indexPath.row = \(indexPath.row) patternString = \("00:" + patternString!)")
-                
-            }
-            
-            videoLength.text = patternString
-        }
         
-        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
-        title.frame.size = CGSizeMake(cell.frame.size.width, height)
-        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
-        count.frame.size = CGSizeMake(cell.frame.size.width, height)
+        CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
+        
+        if recordSearchSettings.type == "channel" {
+            
+            let height = (cell.frame.size.height - thumbnail.frame.size.height)/2
+            cell.titleHeight.constant = height
+            cell.channelTitleHeight.constant = 0
+            cell.viewCountHeight.constant = height
+
+        } else {
+            
+            let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
+            cell.titleHeight.constant = height
+            cell.channelTitleHeight.constant = height
+            cell.viewCountHeight.constant = height
+            
+        }
 
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 0);
+        return UIEdgeInsetsMake(5, 5, 5, 5);
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(collectionView.frame.width/2-5, collectionView.frame.height/3)
+        return CGSizeMake(collectionView.frame.width/2-10, collectionView.frame.height/3)
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -334,7 +268,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
-        performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+        CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
             if HTTPStatusCode == 200 && error == nil {
                 // 將 JSON 資料轉換成字典物件
                 do {
@@ -373,25 +307,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         
     }
     
-    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
-        
-        let request = NSMutableURLRequest(URL: targetURL)
-        request.HTTPMethod = "GET"
-        
-        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfiguration.timeoutIntervalForResource = 10
-        
-        let session = NSURLSession(configuration: sessionConfiguration)
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
-            })
-        })
-        
-        task.resume()
-    }
-    
     func getDetails(id: String) {
 
         var urlString: String!
@@ -423,7 +338,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
-        performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+        CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
             
             if HTTPStatusCode == 200 && error == nil {
                 

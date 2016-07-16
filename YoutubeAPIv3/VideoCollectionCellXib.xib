@@ -73,10 +73,13 @@
             <size key="customSize" width="210" height="195"/>
             <connections>
                 <outlet property="channelTitle" destination="ON4-tr-4EC" id="nhR-ne-KwL"/>
+                <outlet property="channelTitleHeight" destination="HrZ-Ao-ZkJ" id="LNW-va-Fon"/>
                 <outlet property="thumbnail" destination="Bqr-6A-7Qw" id="mqz-VS-74k"/>
                 <outlet property="title" destination="QT5-17-Yud" id="GkD-xv-1pO"/>
+                <outlet property="titleHeight" destination="bBV-4U-b11" id="rsI-LE-RhP"/>
                 <outlet property="videoLength" destination="hXc-Ed-efD" id="SsN-hf-GGe"/>
                 <outlet property="viewCount" destination="Nii-uG-stU" id="Jzv-gW-Zuq"/>
+                <outlet property="viewCountHeight" destination="vXN-xi-vbz" id="GAw-Vz-GyB"/>
             </connections>
             <point key="canvasLocation" x="321" y="174"/>
         </collectionViewCell>
