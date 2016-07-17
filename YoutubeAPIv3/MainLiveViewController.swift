@@ -10,6 +10,7 @@ import UIKit
 
 class MainLiveViewController: UIViewController {
     
+    @IBOutlet weak var item: UINavigationItem!
     
     @IBOutlet weak var liveView: UIView!
     var controllerArray: [UIViewController] = []
@@ -23,7 +24,6 @@ class MainLiveViewController: UIViewController {
         .MenuItemWidth(90.0),
         .CenterMenuItems(true)
     ]
-
     
     var pageMenu : CAPSPageMenu?
     
@@ -54,6 +54,7 @@ class MainLiveViewController: UIViewController {
         
         recordSearchSettings.liveViewHeight = liveView.frame.height
         super.viewDidAppear(animated)
+        setRegionButton()
         if pageMenu == nil {
             pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height), pageMenuOptions: parameters)
         
@@ -62,6 +63,27 @@ class MainLiveViewController: UIViewController {
         
             pageMenu!.didMoveToParentViewController(self)
         }
+        
+        
+    }
+    
+    func setRegionButton(){
+        
+        let button: UIButton = UIButton(type: .Custom)
+        button.setImage(UIImage(named: recordSearchSettings.regionCode), forState: .Normal)
+        button.addTarget(self, action: #selector(changeRegion), forControlEvents: UIControlEvents.TouchUpInside)
+        button.frame = CGRectMake(0, 0, 30, 30)
+        let barButton = UIBarButtonItem(customView: button)
+        item.rightBarButtonItem = barButton
+        
+        
+    }
+    
+    func changeRegion(){
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let regionViewController = storyBoard.instantiateViewControllerWithIdentifier("RegionViewController") as! RegionViewController
+        presentViewController(regionViewController, animated: true, completion: nil)
         
     }
 

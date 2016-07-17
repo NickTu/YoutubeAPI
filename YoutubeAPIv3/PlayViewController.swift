@@ -158,11 +158,11 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("idRelatedToVideoTableViewCell", forIndexPath: indexPath) as! relatedToVideoTableViewCell
-        let title = cell.title as CustomLabel
-        let channelTitle = cell.channelTitle as CustomLabel
+        let title = cell.title as UILabel
+        let channelTitle = cell.channelTitle as UILabel
         let thumbnail = cell.thumbnail as UIImageView
         let videoLength = cell.videoLength as UILabel
-        let viewCount = cell.viewCount as CustomLabel
+        let viewCount = cell.viewCount as UILabel
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
         
         if details["viewCount"] == nil {

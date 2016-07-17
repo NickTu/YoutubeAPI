@@ -11,9 +11,9 @@ import UIKit
 class relatedToVideoTableViewCell: UITableViewCell {
     
     @IBOutlet weak var thumbnail: UIImageView!
-    @IBOutlet weak var title: CustomLabel!
-    @IBOutlet weak var viewCount: CustomLabel!
-    @IBOutlet weak var channelTitle: CustomLabel!
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var viewCount: UILabel!
+    @IBOutlet weak var channelTitle: UILabel!
     @IBOutlet weak var videoLength: UILabel!
     
     override func awakeFromNib() {

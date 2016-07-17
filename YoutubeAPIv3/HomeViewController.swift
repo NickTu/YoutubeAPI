@@ -12,7 +12,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var navigationBar: UINavigationBar!
-    @IBOutlet weak var collectionViewTop: NSLayoutConstraint!
+    @IBOutlet weak var collectionViewTop: NSLayoutConstraint!    
+    @IBOutlet weak var item: UINavigationItem!
 
     var apiKey = "AIzaSyDJFb3a04UYWc0NSdJv07SQ-wf8TFgyI6Y"
     var collectionDataArray: Array<Dictionary<NSObject, AnyObject>> = []
@@ -21,24 +22,62 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
+    var isDidLoad:Bool!
+    var taskArray:NSMutableArray!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = self        
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
-        pageToken = ""
-        hasNextPage = true
-        isScrollSearch = false
-        cleanDataAndStartSearch()
+        recordSearchSettings.isChangeRegionCode = false
+        isDidLoad = true
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        setRegionButton()
+        if recordSearchSettings.isChangeRegionCode == true || isDidLoad == true{
+            isDidLoad = false
+            pageToken = ""
+            hasNextPage = false
+            isScrollSearch = false
+            cleanDataAndStartSearch()
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if NSThread.currentThread().executing {
+            NSThread.currentThread().cancel()
+        }
+        if NSThread.mainThread().executing {
+            NSThread.mainThread().cancel()
+        }
+    }
+    
+    func setRegionButton(){
+        
+        let button: UIButton = UIButton(type: .Custom)
+        
+        button.setImage(UIImage(named: recordSearchSettings.regionCode), forState: .Normal)
+        button.addTarget(self, action: #selector(changeRegion), forControlEvents: UIControlEvents.TouchUpInside)
+        button.frame = CGRectMake(0, 0, 30, 30)
+        let barButton = UIBarButtonItem(customView: button)
+        item.rightBarButtonItem = barButton
+        
+    }
+    
+    func changeRegion(){
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let regionViewController = storyBoard.instantiateViewControllerWithIdentifier("RegionViewController") as! RegionViewController
+        presentViewController(regionViewController, animated: true, completion: nil)
+        
     }
     
     func cleanDataAndStartSearch(){
@@ -122,6 +161,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func search(){
         
+        print("Home search")
         var urlStringPageToken:String!
         
         if self.pageToken.characters.count > 0 {
@@ -130,8 +170,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             urlStringPageToken = ""
         }
         
-        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50&key=\(apiKey)" + urlStringPageToken
+        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50&key=\(apiKey)&regionCode=\(recordSearchSettings.regionCode)" + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        print("Home urlString = \(urlString)")
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
@@ -142,6 +183,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
+                    
+                    let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject> )["totalResults"]
 
                     if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
                         self.hasNextPage = true
@@ -153,6 +196,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         self.hasNextPage = true
                         self.pageToken = resultsDict["nextPageToken"] as! String
                     }
+                    
+                    print("Home search total count = \(totalCount)")
                     
                     for i in 0 ..< items.count {
                         let snippetDict = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
@@ -172,9 +217,17 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     print(error)
                 }
                 
-            }else {
-                print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel videos: \(error)")
+            } else if HTTPStatusCode == 0 && error != nil {
+                
+                print("Home search End search error = \(error)")
+                self.hasNextPage = true
+                self.pageToken = ""
+                self.isScrollSearch = false
+                self.endSearch()
+                
+            } else {
+                print("Home search HTTP Status Code = \(HTTPStatusCode)")
+                print("Home search Error while loading channel videos: \(error)")
             }
             
         })

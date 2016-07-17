@@ -24,26 +24,42 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     var pageToken:String!
     var hasNextPage:Bool!
     var isScrollSearch:Bool!
+    var isDidLoad:Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
-        pageToken = ""
-        hasNextPage = false
-        hasNextPage = true
-        isScrollSearch = false
+        recordSearchSettings.isChangeRegionCode = true
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/4, y: 0, width: 50, height: 50)
         view.addSubview(activityIndicator)
-        cleanDataAndStartSearch()
+        recordSearchSettings.isChangeRegionCode = false
+        isDidLoad = true
     }
     
     override func viewDidAppear(animated: Bool) {
         
         super.viewDidAppear(animated)
+        if recordSearchSettings.isChangeRegionCode == true || isDidLoad == true{
+            isDidLoad = false
+            pageToken = ""
+            hasNextPage = false
+            isScrollSearch = false
+            cleanDataAndStartSearch()
+        }
         
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if NSThread.currentThread().executing {
+            NSThread.currentThread().cancel()
+        }
+        if NSThread.mainThread().executing {
+            NSThread.mainThread().cancel()
+        }
     }
     
     func cleanDataAndStartSearch(){
@@ -64,7 +80,6 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        //print("scrollViewDidScroll")
         let offset = scrollView.contentOffset /* 當前frame距離整個ScrollView的偏移量 */
         let bounds = scrollView.bounds
         let size = scrollView.contentSize /* 整個ScrollView的size */
@@ -137,6 +152,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func searchLive(){
         
+        print("Live searchLive")
         activityIndicator.startAnimating()
         var urlString:String
         var urlStringPageToken:String!
@@ -157,11 +173,13 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
             urlStringPageToken = "&pageToken=\(self.pageToken)"
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&eventType=live" + urlStringPageToken + urlStringVideoType
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&eventType=live&regionCode=\(recordSearchSettings.regionCode)" + urlStringPageToken + urlStringVideoType
+        print("Live searchLive urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+            
             if HTTPStatusCode == 200 && error == nil {
                 // 將 JSON 資料轉換成字典物件
                 do {
@@ -183,11 +201,10 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                         self.pageToken = resultsDict["nextPageToken"] as! String
                     }
                     
-                    print("total count = \(totalCount)")
+                    print("Live search total count = \(totalCount)")
                     
                     for i in 0 ..< items.count {
                         let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
-                        self.keyVideoId.append( videoId )
                         self.getDetails( videoId )
                     }
                     
@@ -199,9 +216,17 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                     print(error)
                 }
                 
-            }else {
-                print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel videos: \(error)")
+            } else if HTTPStatusCode == 0 && error != nil {
+                
+                print("Live searchLive End search error = \(error)")
+                self.hasNextPage = true
+                self.pageToken = ""
+                self.isScrollSearch = false
+                self.endSearch()
+                
+            } else {
+                print("Live searchLive HTTP Status Code = \(HTTPStatusCode)")
+                print("Live searchLive Error while loading channel videos: \(error)")
             }
             
         })
@@ -211,15 +236,23 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func getDetails(id: String) {
         
+        print("Live getDetails")
         var urlString: String!
         
-        urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?&part=snippet,liveStreamingDetails&key=\(apiKey)&id=\(id)"
+        urlString = youtubeNetworkAddress + "videos?&part=snippet,liveStreamingDetails&key=\(apiKey)&id=\(id)"
+        print("Live getDetails urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
-            
-            if HTTPStatusCode == 200 && error == nil {
+
+            if HTTPStatusCode == 0 && error != nil {
+                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
+                self.searchSuccessCount -= 1
+                if self.successCount == self.searchSuccessCount {
+                    self.endSearch()
+                }
+            } else if HTTPStatusCode == 200 && error == nil {
                 
                 do {
                     // 將 JSON 資料轉換成字典
@@ -241,6 +274,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                         
                         videoDetailsDict["videoID"] = id
                         
+                        self.keyVideoId.append( id )
                         self.collectionDataArray[ id ] = videoDetailsDict
                         
                         self.successCount += 1
@@ -256,8 +290,8 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                 }
                 
             } else {
-                print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel details: \(error)")
+                print("Live getDetails HTTP Status Code = \(HTTPStatusCode)")
+                print("Live getDetails Error while loading channel details: \(error)")
             }
             
         })

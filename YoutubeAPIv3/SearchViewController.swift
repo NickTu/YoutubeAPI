@@ -62,6 +62,17 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         }
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if NSThread.currentThread().executing {
+            NSThread.currentThread().cancel()
+        }
+        if NSThread.mainThread().executing {
+            NSThread.mainThread().cancel()
+        }
+    }
+
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         againSearch = true
@@ -198,6 +209,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func search(searchTest:String){
         
+        print("Search search")
         activityIndicator.startAnimating()
         var urlString:String
         var urlStringVideoCategoryId:String!
@@ -265,17 +277,26 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         }
         
         urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&q=\(searchTest)&type=\(recordSearchSettings.type)&key=\(apiKey)&order=\(recordSearchSettings.order)" + urlStringVideoCategoryId + urlStringVideoDurationDimensionDefinition + urlStringUploadTime + urlStringPageToken
+        print("Search urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
-            if HTTPStatusCode == 200 && error == nil {
+            if HTTPStatusCode == 0 && error != nil {
+                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
+                self.searchSuccessCount -= 1
+                if self.successCount == self.searchSuccessCount {
+                    self.endSearch()
+                }
+            } else if HTTPStatusCode == 200 && error == nil {
                 // 將 JSON 資料轉換成字典物件
                 do {
                     
                     let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
                     let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
                     self.searchSuccessCount = items.count
+                    
+                    let totalCount = (resultsDict["pageInfo"] as! Dictionary<NSObject, AnyObject> )["totalResults"]
                     
                     if resultsDict["nextPageToken"] != nil && resultsDict["prevPageToken"] != nil{
                         self.hasNextPage = true
@@ -288,9 +309,10 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         self.pageToken = resultsDict["nextPageToken"] as! String
                     }
                     
+                    print("Search search total count = \(totalCount)")
+                    
                     for i in 0 ..< items.count {
                         let videoId = (items[i]["id"] as! Dictionary<NSObject, AnyObject>)[ (recordSearchSettings.type!) + "Id"] as! String
-                        self.keyVideoId.append( videoId )
                         self.getDetails( videoId )
                     }
                     
@@ -298,9 +320,17 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     print(error)
                  }
                 
-            }else {
-                print("HTTP Status Code = \(HTTPStatusCode)")
-                print("Error while loading channel videos: \(error)")
+            } else if HTTPStatusCode == 0 && error != nil {
+                
+                print("Search search End search error = \(error)")
+                self.hasNextPage = true
+                self.pageToken = ""
+                self.isScrollSearch = false
+                self.endSearch()
+                
+            } else {
+                print("Search search HTTP Status Code = \(HTTPStatusCode)")
+                print("Search search Error while loading channel videos: \(error)")
             }
             
         })
@@ -309,6 +339,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func getDetails(id: String) {
 
+        print("Search getDetails")
         var urlString: String!
         var urlStringVideoCategoryId:String!
         var urlStringType:String!
@@ -335,12 +366,19 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         }
 
         urlString = youtubeNetworkAddress + "\(recordSearchSettings.type!)s?" + urlStringType + "&key=\(apiKey)&id=\(id)" + urlStringVideoCategoryId
+        print("Search getDetails urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
             
-            if HTTPStatusCode == 200 && error == nil {
+            if HTTPStatusCode == 0 && error != nil {
+                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
+                self.searchSuccessCount -= 1
+                if self.successCount == self.searchSuccessCount {
+                    self.endSearch()
+                }
+            } else if HTTPStatusCode == 200 && error == nil {
                 
                 do {
                     // 將 JSON 資料轉換成字典
@@ -370,6 +408,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                             videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String
                         }
                         
+                        self.keyVideoId.append( id )
                         self.collectionDataArray[ id ] = videoDetailsDict
                         
                         self.successCount += 1
