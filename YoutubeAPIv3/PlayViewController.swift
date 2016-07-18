@@ -12,7 +12,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     
     @IBOutlet weak var playerView: YTPlayerView!
     @IBAction func backViewController(sender: UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromLeft
+        view.window!.layer.addAnimation(transition, forKey: kCATransition)
+        dismissViewControllerAnimated(false, completion: nil)
     }
     @IBOutlet weak var tableViewTop: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
@@ -170,6 +175,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         } else {
             viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
         }
+        viewCount.textAlignment = .Left
 
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)        
         
@@ -183,6 +189,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     
     func search(){
         
+        print("Play search")
         var urlStringPageToken:String!
         var urlString:String!
         
@@ -200,7 +207,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
             urlString = youtubeNetworkAddress + "playlistItems?&part=snippet&maxResults=50&key=\(apiKey)&playlistId=\(ID)" + urlStringPageToken
         }
         
-        print("urlString = \(urlString)")
+        print("Play urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
@@ -233,7 +240,6 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                             let snippet = items[i]["snippet"] as! Dictionary<NSObject, AnyObject>
                             videoId = (snippet["resourceId"] as! Dictionary<NSObject, AnyObject>)[ "videoId"] as! String
                         }
-                        self.keyVideoId.append( videoId )
                         self.getVideoDetails( videoId )
                     }
                     
@@ -242,13 +248,17 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                 }
                 
             }else {
-                print("HTTP Status Code = \(HTTPStatusCode)")
-                self.endSearch()
+                print("Play HTTP Status Code = \(HTTPStatusCode)")
                 if self.type == "video" {
-                    print("Error while loading video details: \(error)")
+                    print("Play Error while loading video details: \(error)")
                 } else {
-                    print("Error while loading playlist details: \(error)")
+                    print("Play Error while loading playlist details: \(error)")
                 }
+                self.hasNextPage = true
+                self.pageToken = ""
+                self.isScrollSearch = false
+                self.tableViewDataArray.removeAll(keepCapacity: false)
+                self.endSearch()
             }
             
         })
@@ -257,15 +267,23 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     
     func getVideoDetails(id: String) {
         
+        print("Play getVideoDetails")
         var urlString: String!
         
         urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&key=\(apiKey)&id=\(id)"
+        print("Play urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
             
-            if HTTPStatusCode == 200 && error == nil {
+            if HTTPStatusCode == 0 && error != nil {
+                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
+                self.searchSuccessCount -= 1
+                if self.successCount == self.searchSuccessCount {
+                    self.endSearch()
+                }
+            } else if HTTPStatusCode == 200 && error == nil {
                 
                 do {
                     // 將 JSON 資料轉換成字典
@@ -285,6 +303,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                         videoDetailsDict["videoID"] = id
                         videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String
                         
+                        self.keyVideoId.append( id )
                         self.tableViewDataArray[ id ] = videoDetailsDict
                         
                         self.successCount += 1
@@ -297,17 +316,17 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                     }
                     
                 } catch {
-                    print("Error = \(error)")
+                    print("Play Error = \(error)")
                 }
                 
             } else {
                 
-                print("HTTP Status Code = \(HTTPStatusCode)")
+                print("Play HTTP Status Code = \(HTTPStatusCode)")
                 self.endSearch()
                 if self.type == "video" {
-                    print("Error while loading video details: \(error)")
+                    print("Play Error while loading video details: \(error)")
                 } else {
-                    print("Error while loading playlist details: \(error)")
+                    print("Play Error while loading playlist details: \(error)")
                 }
                 
             }

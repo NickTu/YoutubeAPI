@@ -123,7 +123,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="VideoCategories" id="wpR-BU-iyE">
-                                        <barButtonItem key="leftBarButtonItem" title="Done" id="AId-5k-hNx">
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="AId-5k-hNx">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="zln-6A-wIK" id="GPj-J2-Z5N"/>
                                             </connections>
@@ -177,11 +177,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bVt-hp-Peh">
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVt-hp-Peh">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.95686274510000002" green="0.15416343060000001" blue="0.14380779439999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
-                                    <navigationItem title="Region" id="raD-KO-8WY">
-                                        <barButtonItem key="leftBarButtonItem" title="Done" id="IeK-Yw-pE3">
+                                    <navigationItem title="CountryRegion" id="raD-KO-8WY">
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="IeK-Yw-pE3">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="0TW-RT-Yej" id="Gv0-UW-BYL"/>
                                             </connections>
@@ -211,7 +213,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8hx-ce-Tc9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="107" y="992"/>
+            <point key="canvasLocation" x="-150" y="1027"/>
         </scene>
         <!--Main Live View Controller-->
         <scene sceneID="BkM-BQ-Hjm">
@@ -238,16 +240,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="EkM-vp-7vm" firstAttribute="leading" secondItem="XYg-0b-eGo" secondAttribute="leading" id="3n8-KI-vLz"/>
-                            <constraint firstItem="EkM-vp-7vm" firstAttribute="trailing" secondItem="XYg-0b-eGo" secondAttribute="trailing" id="Kas-co-zBQ"/>
-                            <constraint firstItem="XYg-0b-eGo" firstAttribute="top" secondItem="EkM-vp-7vm" secondAttribute="bottom" id="R7q-jw-wSX"/>
-                            <constraint firstItem="XYg-0b-eGo" firstAttribute="bottom" secondItem="pbs-Re-ycq" secondAttribute="top" id="Ssv-2l-KVh"/>
-                            <constraint firstItem="EkM-vp-7vm" firstAttribute="top" secondItem="uLH-g0-HAY" secondAttribute="bottom" id="bsb-eQ-1gm"/>
-                            <constraint firstItem="EkM-vp-7vm" firstAttribute="leading" secondItem="dVc-h8-UMc" secondAttribute="leading" id="nHv-wK-vX8"/>
-                            <constraint firstAttribute="trailing" secondItem="EkM-vp-7vm" secondAttribute="trailing" id="pX6-IP-Fed"/>
+                            <constraint firstItem="EkM-vp-7vm" firstAttribute="leading" secondItem="XYg-0b-eGo" secondAttribute="leading" id="3t9-Y8-3jG"/>
+                            <constraint firstAttribute="trailing" secondItem="EkM-vp-7vm" secondAttribute="trailing" id="EAw-0g-y1g"/>
+                            <constraint firstItem="EkM-vp-7vm" firstAttribute="trailing" secondItem="XYg-0b-eGo" secondAttribute="trailing" id="XlJ-ot-8eD"/>
+                            <constraint firstItem="XYg-0b-eGo" firstAttribute="bottom" secondItem="pbs-Re-ycq" secondAttribute="top" id="ZrF-Lv-Baq"/>
+                            <constraint firstItem="EkM-vp-7vm" firstAttribute="top" secondItem="uLH-g0-HAY" secondAttribute="bottom" id="liy-VE-MPb"/>
+                            <constraint firstItem="XYg-0b-eGo" firstAttribute="top" secondItem="EkM-vp-7vm" secondAttribute="bottom" id="vin-fV-dd3"/>
+                            <constraint firstItem="EkM-vp-7vm" firstAttribute="leading" secondItem="dVc-h8-UMc" secondAttribute="leading" id="wKY-7j-rQK"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="live" id="TXh-0U-wp5"/>
+                    <navigationItem key="navigationItem" id="hpk-Cy-xUI"/>
                     <connections>
                         <outlet property="item" destination="R8O-Cw-dIO" id="NsD-4L-MXf"/>
                         <outlet property="liveView" destination="XYg-0b-eGo" id="Huj-yy-u8X"/>
@@ -256,7 +259,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y4B-qU-Glq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="740" y="992"/>
+            <point key="canvasLocation" x="510" y="1027"/>
         </scene>
         <!--Home-->
         <scene sceneID="wg7-f3-ORb">
@@ -328,7 +331,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
                                     <navigationItem title="SaerchSettings" id="Ay2-AD-7XO">
-                                        <barButtonItem key="leftBarButtonItem" style="done" systemItem="done" id="2I9-iO-QeL">
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="2I9-iO-QeL">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="dHo-88-ZkT" id="Msh-k5-VQf"/>
                                             </connections>
@@ -386,7 +389,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="Play" id="b2X-jy-rTz">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" id="h1H-2e-Guv">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="reply" id="h1H-2e-Guv">
                                             <connections>
                                                 <action selector="backViewController:" destination="W7s-P3-CSf" id="oLy-eB-3wV"/>
                                             </connections>
@@ -429,7 +432,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="58s-QW-d3H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-545" y="992"/>
+            <point key="canvasLocation" x="-778" y="992"/>
         </scene>
         <!--Main Tabbar Controller-->
         <scene sceneID="yl2-sM-qoP">

@@ -31,18 +31,16 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         collectionView.dataSource = self        
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20, width: 50, height: 50)
-        activityIndicator.startAnimating()
+        activityIndicator.frame = CGRect(x: self.view.bounds.width/2-25, y: navigationBar.frame.size.height + 20 + 25, width: 50, height: 50)        
         view.addSubview(activityIndicator)
-        recordSearchSettings.isChangeRegionCode = false
-        isDidLoad = true
+        common.isSearch = true
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         setRegionButton()
-        if recordSearchSettings.isChangeRegionCode == true || isDidLoad == true{
-            isDidLoad = false
+        if common.isSearch == true{
+            common.isSearch = false
             pageToken = ""
             hasNextPage = false
             isScrollSearch = false
@@ -64,7 +62,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         
         let button: UIButton = UIButton(type: .Custom)
         
-        button.setImage(UIImage(named: recordSearchSettings.regionCode), forState: .Normal)
+        button.setImage(UIImage(named: countryRegion.regionCode), forState: .Normal)
         button.addTarget(self, action: #selector(changeRegion), forControlEvents: UIControlEvents.TouchUpInside)
         button.frame = CGRectMake(0, 0, 30, 30)
         let barButton = UIBarButtonItem(customView: button)
@@ -81,15 +79,17 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     }
     
     func cleanDataAndStartSearch(){
+        activityIndicator.startAnimating()
         collectionDataArray.removeAll(keepCapacity: false)
         collectionViewTop.constant = activityIndicator.frame.height
         search()
     }
     
     func endSearch(){
-        self.activityIndicator.stopAnimating()
+        activityIndicator.stopAnimating()
         collectionViewTop.constant = 0
-        self.collectionView.reloadData()
+        collectionView.reloadData()
+        collectionView.setContentOffset(CGPointZero, animated: true)
         isScrollSearch = false
     }
     
@@ -116,7 +116,13 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         let details = collectionDataArray[indexPath.row]
         playViewController.type = "video"
         playViewController.ID = details["videoID"] as! String
-        presentViewController(playViewController, animated: true, completion: nil)
+        
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        view.window!.layer.addAnimation(transition, forKey: kCATransition)
+        presentViewController(playViewController, animated: false, completion: nil)
         
     }
     
@@ -136,9 +142,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         viewCount.sizeToFit()
         viewCount.textAlignment = .Left
         if details["viewCount"] == nil {
-            viewCount.text = "No viewCount"
+            viewCount.text = "0 viewCount"
         } else {
-            viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
+            viewCount.text = (details["viewCount"] as? String)! + " viewCount"
         }
         
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
@@ -170,7 +176,7 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             urlStringPageToken = ""
         }
         
-        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50&key=\(apiKey)&regionCode=\(recordSearchSettings.regionCode)" + urlStringPageToken
+        var urlString = youtubeNetworkAddress + "videos?&part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50&key=\(apiKey)&regionCode=\(countryRegion.regionCode)" + urlStringPageToken
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         print("Home urlString = \(urlString)")
         let targetURL = NSURL(string: urlString)
@@ -217,17 +223,15 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                     print(error)
                 }
                 
-            } else if HTTPStatusCode == 0 && error != nil {
-                
-                print("Home search End search error = \(error)")
+            } else {
+                print("Home search HTTP Status Code = \(HTTPStatusCode)")
+                print("Home search Error while loading videos: \(error)")
                 self.hasNextPage = true
                 self.pageToken = ""
                 self.isScrollSearch = false
+                self.collectionDataArray.removeAll(keepCapacity: false)
                 self.endSearch()
                 
-            } else {
-                print("Home search HTTP Status Code = \(HTTPStatusCode)")
-                print("Home search Error while loading channel videos: \(error)")
             }
             
         })

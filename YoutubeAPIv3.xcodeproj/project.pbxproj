@@ -11,6 +11,8 @@
 		AB1C15B31D3A510F00CFEBD6 /* RegionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1C15B21D3A510F00CFEBD6 /* RegionViewController.swift */; };
 		AB1C15C61D3A688100CFEBD6 /* RegionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1C15C51D3A688100CFEBD6 /* RegionTableViewCell.swift */; };
 		AB1C15C81D3A689B00CFEBD6 /* RegionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB1C15C71D3A689B00CFEBD6 /* RegionTableViewCell.xib */; };
+		AB1C15CA1D3C108000CFEBD6 /* RegionTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB1C15C91D3C108000CFEBD6 /* RegionTableViewHeader.xib */; };
+		AB1C15CC1D3C108F00CFEBD6 /* RegionTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1C15CB1D3C108F00CFEBD6 /* RegionTableViewHeader.swift */; };
 		AB1EA99C1D323D0700A41307 /* relatedToVideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */; };
 		AB1EA99E1D323D2E00A41307 /* relatedToVideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */; };
 		AB1EA9A41D37D17B00A41307 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */; };
@@ -39,6 +41,8 @@
 		AB1C15B21D3A510F00CFEBD6 /* RegionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionViewController.swift; sourceTree = "<group>"; };
 		AB1C15C51D3A688100CFEBD6 /* RegionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionTableViewCell.swift; sourceTree = "<group>"; };
 		AB1C15C71D3A689B00CFEBD6 /* RegionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegionTableViewCell.xib; sourceTree = "<group>"; };
+		AB1C15C91D3C108000CFEBD6 /* RegionTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegionTableViewHeader.xib; sourceTree = "<group>"; };
+		AB1C15CB1D3C108F00CFEBD6 /* RegionTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionTableViewHeader.swift; sourceTree = "<group>"; };
 		AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = relatedToVideoTableViewCell.swift; sourceTree = "<group>"; };
 		AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = relatedToVideoTableViewCell.xib; sourceTree = "<group>"; };
 		AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -91,6 +95,33 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		AB1C15CD1D3C1A7300CFEBD6 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				AB1C15C51D3A688100CFEBD6 /* RegionTableViewCell.swift */,
+				AB1C15C71D3A689B00CFEBD6 /* RegionTableViewCell.xib */,
+				AB1C15CB1D3C108F00CFEBD6 /* RegionTableViewHeader.swift */,
+				AB1C15C91D3C108000CFEBD6 /* RegionTableViewHeader.xib */,
+				ABA628A21CFC7F7D001DC12F /* VideoCollectionCell.swift */,
+				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
+				AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */,
+				AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */,
+			);
+			name = CustomView;
+			sourceTree = "<group>";
+		};
+		AB1C15CE1D3C1AB000CFEBD6 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				ABA628AA1CFD68E3001DC12F /* HomeViewController.swift */,
+				ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */,
+				AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */,
+				AB0346851D249ED700F50CE4 /* LiveViewController.swift */,
+				AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
 		ABA6287C1CFC7F39001DC12F = {
 			isa = PBXGroup;
 			children = (
@@ -112,25 +143,16 @@
 		ABA628871CFC7F39001DC12F /* YoutubeAPIv3 */ = {
 			isa = PBXGroup;
 			children = (
+				AB1C15CE1D3C1AB000CFEBD6 /* ViewController */,
+				AB1C15CD1D3C1A7300CFEBD6 /* CustomView */,
 				AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */,
 				AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */,
 				AB1EA9A51D380FA800A41307 /* CommonFunction.swift */,
 				ABA628881CFC7F39001DC12F /* AppDelegate.swift */,
-				ABA628AA1CFD68E3001DC12F /* HomeViewController.swift */,
-				ABA6289C1CFC7F52001DC12F /* SearchViewController.swift */,
-				AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */,
-				AB0346851D249ED700F50CE4 /* LiveViewController.swift */,
-				AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */,
 				ABA6289E1CFC7F6D001DC12F /* VideoCategories.swift */,
 				ABA628A01CFC7F75001DC12F /* SearchSettings.swift */,
 				AB6100911D09A2DD00AB102D /* PlayViewController.swift */,
-				ABA628A21CFC7F7D001DC12F /* VideoCollectionCell.swift */,
-				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
-				AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */,
-				AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */,
 				AB1C15B21D3A510F00CFEBD6 /* RegionViewController.swift */,
-				AB1C15C51D3A688100CFEBD6 /* RegionTableViewCell.swift */,
-				AB1C15C71D3A689B00CFEBD6 /* RegionTableViewCell.xib */,
 				ABA628861CFC7F39001DC12F /* Products */,
 				ABA628A81CFC7FC6001DC12F /* Assets.xcassets */,
 				ABA628A61CFC7FB1001DC12F /* Main.storyboard */,
@@ -203,6 +225,7 @@
 			files = (
 				AB1EA99E1D323D2E00A41307 /* relatedToVideoTableViewCell.xib in Resources */,
 				ABA628951CFC7F39001DC12F /* LaunchScreen.storyboard in Resources */,
+				AB1C15CA1D3C108000CFEBD6 /* RegionTableViewHeader.xib in Resources */,
 				ABA628A51CFC7F7D001DC12F /* VideoCollectionCellXib.xib in Resources */,
 				ABA628A91CFC7FC6001DC12F /* Assets.xcassets in Resources */,
 				AB7E9BCC1D27541A00439BD4 /* LiveViewController.xib in Resources */,
@@ -272,6 +295,7 @@
 				AB1C15C61D3A688100CFEBD6 /* RegionTableViewCell.swift in Sources */,
 				AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */,
 				AB1C15B31D3A510F00CFEBD6 /* RegionViewController.swift in Sources */,
+				AB1C15CC1D3C108F00CFEBD6 /* RegionTableViewHeader.swift in Sources */,
 				ABA6289D1CFC7F52001DC12F /* SearchViewController.swift in Sources */,
 				ABA6289F1CFC7F6D001DC12F /* VideoCategories.swift in Sources */,
 				ABA628A11CFC7F75001DC12F /* SearchSettings.swift in Sources */,

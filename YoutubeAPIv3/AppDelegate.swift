@@ -16,9 +16,17 @@ struct recordSearchSettings {
     static var videoDimension:String! = "any"
     static var videoDefinition:String! = "any"
     static var videoType:String! = "All"
+}
+
+struct common {
     static var liveViewHeight:CGFloat! = 0
+    static var isSearch:Bool! = false
+}
+
+struct countryRegion {
     static var regionCode:String! = "US"
-    static var isChangeRegionCode:Bool! = true
+    static var section:Int! = 3
+    static var row:Int! = 0
 }
 
 @UIApplicationMain

@@ -138,26 +138,29 @@ class CommonFunction {
         request.HTTPMethod = "GET"
         
         let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfiguration.timeoutIntervalForResource = 10
+        sessionConfiguration.timeoutIntervalForResource = 5
         
         let session = NSURLSession(configuration: sessionConfiguration)
         
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            print("completionHandler")
+            //print("completionHandler")
             //let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                print("dispatch_async")
+                //print("dispatch_async")
                 if response != nil {
                     completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
+                    //print("response.statusCode = \( (response as! NSHTTPURLResponse).statusCode ) error = \(error)")
                 }else {
                     completion(data: data, HTTPStatusCode: 0, error: error)
-                    print("response = nil error = \(error)")
+                    //print("response = nil error = \(error)")
                 }
             })
         })
         
         task.resume()
     }
+    
+    
 
     
 }

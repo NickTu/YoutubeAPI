@@ -31,18 +31,17 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNib(UINib(nibName: "VideoCollectionCellXib",bundle: nil), forCellWithReuseIdentifier: "idVideoCollectionCell")
-        recordSearchSettings.isChangeRegionCode = true
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         activityIndicator.frame = CGRect(x: self.view.bounds.width/4, y: 0, width: 50, height: 50)
         view.addSubview(activityIndicator)
-        recordSearchSettings.isChangeRegionCode = false
-        isDidLoad = true
+        common.isSearch = true
     }
     
     override func viewDidAppear(animated: Bool) {
         
         super.viewDidAppear(animated)
-        if recordSearchSettings.isChangeRegionCode == true || isDidLoad == true{
+        if common.isSearch == true {
+            common.isSearch = false
             isDidLoad = false
             pageToken = ""
             hasNextPage = false
@@ -72,8 +71,9 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func endSearch(){
         self.activityIndicator.stopAnimating()
-        collectionViewTop.constant = 0
+        collectionViewTop.constant = 0        
         self.collectionView.reloadData()
+        collectionView.setContentOffset(CGPointZero, animated: true)
         self.collectionView.scrollEnabled = true
         isScrollSearch = false
     }
@@ -109,9 +109,9 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         
         if details["concurrentViewers"] == nil {
-            count.text = "No concurrentViewers"
+            count.text = "0 conViewers"
         } else {
-            count.text = "concurrentViewers = " + (details["concurrentViewers"] as? String)!
+            count.text = (details["concurrentViewers"] as? String)! + " conViewers"
         }
         count.textAlignment = .Left
         
@@ -130,7 +130,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {        
-        return CGSizeMake(collectionView.frame.width/2-10, recordSearchSettings.liveViewHeight/3)
+        return CGSizeMake(collectionView.frame.width/2-10, common.liveViewHeight/3)
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -140,7 +140,13 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         playViewController.type = "video"
         playViewController.ID = details["videoID"] as! String
-        presentViewController(playViewController, animated: true, completion: nil)
+        
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        view.window!.layer.addAnimation(transition, forKey: kCATransition)
+        presentViewController(playViewController, animated: false, completion: nil)
         
     }
     
@@ -173,7 +179,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
             urlStringPageToken = "&pageToken=\(self.pageToken)"
         }
         
-        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&eventType=live&regionCode=\(recordSearchSettings.regionCode)" + urlStringPageToken + urlStringVideoType
+        urlString = youtubeNetworkAddress + "search?&part=snippet&maxResults=50&order=viewCount&type=video&key=\(apiKey)&eventType=live&regionCode=\(countryRegion.regionCode)" + urlStringPageToken + urlStringVideoType
         print("Live searchLive urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
@@ -216,17 +222,14 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
                     print(error)
                 }
                 
-            } else if HTTPStatusCode == 0 && error != nil {
-                
-                print("Live searchLive End search error = \(error)")
+            } else {
+                print("Live searchLive HTTP Status Code = \(HTTPStatusCode)")
+                print("Live searchLive Error while search live videos: \(error)")
                 self.hasNextPage = true
                 self.pageToken = ""
                 self.isScrollSearch = false
+                self.collectionDataArray.removeAll(keepCapacity: false)
                 self.endSearch()
-                
-            } else {
-                print("Live searchLive HTTP Status Code = \(HTTPStatusCode)")
-                print("Live searchLive Error while loading channel videos: \(error)")
             }
             
         })
@@ -236,18 +239,18 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func getDetails(id: String) {
         
-        print("Live getDetails")
+        //print("Live getDetails")
         var urlString: String!
         
         urlString = youtubeNetworkAddress + "videos?&part=snippet,liveStreamingDetails&key=\(apiKey)&id=\(id)"
-        print("Live getDetails urlString = \(urlString)")
+        //print("Live getDetails urlString = \(urlString)")
         urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
 
             if HTTPStatusCode == 0 && error != nil {
-                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
+                //print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
                 self.searchSuccessCount -= 1
                 if self.successCount == self.searchSuccessCount {
                     self.endSearch()

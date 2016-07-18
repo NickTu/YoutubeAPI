@@ -89,8 +89,9 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func endSearch(){
         self.activityIndicator.stopAnimating()
-        collectionViewTop.constant = 0
+        collectionViewTop.constant = 0        
         self.collectionView.reloadData()
+        collectionView.setContentOffset(CGPointZero, animated: true)
         self.collectionView.scrollEnabled = true
         isScrollSearch = false
     }
@@ -148,9 +149,18 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         count.sizeToFit()
         count.textAlignment = .Left
         if recordSearchSettings.type == "playlist" {
-            count.text = "itemCount = " + String(details["itemCount"]!)
+            if details["itemCount"] == nil {
+                count.text = "0 itemCount"
+            } else {
+                count.text = String(details["itemCount"]!) + " itemCount"
+            }
         }else {
-            count.text = "viewCount = " + (details["viewCount"] as? String)!
+            if details["viewCount"] == nil {
+                count.text = "0 viewCount"
+            } else {
+                count.text = (details["viewCount"] as? String)! +  " viewCount"
+            }
+            
         }
         
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
@@ -198,7 +208,13 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             playViewController.ID = details["videoID"] as! String
             
         }
-        presentViewController(playViewController, animated: true, completion: nil)
+        
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        view.window!.layer.addAnimation(transition, forKey: kCATransition)
+        presentViewController(playViewController, animated: false, completion: nil)
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
@@ -282,13 +298,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let targetURL = NSURL(string: urlString)
         
         CommonFunction.performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
-            if HTTPStatusCode == 0 && error != nil {
-                print("self.successCount = \(self.successCount) searchSuccessCount = \(self.searchSuccessCount)")
-                self.searchSuccessCount -= 1
-                if self.successCount == self.searchSuccessCount {
-                    self.endSearch()
-                }
-            } else if HTTPStatusCode == 200 && error == nil {
+            
+            if HTTPStatusCode == 200 && error == nil {
                 // 將 JSON 資料轉換成字典物件
                 do {
                     
@@ -320,17 +331,14 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                     print(error)
                  }
                 
-            } else if HTTPStatusCode == 0 && error != nil {
-                
-                print("Search search End search error = \(error)")
+            }else {
+                print("Search search HTTP Status Code = \(HTTPStatusCode)")
+                print("Search search Error while search \(recordSearchSettings.type) : \(error)")
                 self.hasNextPage = true
                 self.pageToken = ""
                 self.isScrollSearch = false
+                self.collectionDataArray.removeAll(keepCapacity: false)
                 self.endSearch()
-                
-            } else {
-                print("Search search HTTP Status Code = \(HTTPStatusCode)")
-                print("Search search Error while loading channel videos: \(error)")
             }
             
         })
