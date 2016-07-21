@@ -35,7 +35,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXc-Ed-efD">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXc-Ed-efD">
                         <rect key="frame" x="94" y="93" width="21" height="12"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -58,7 +58,9 @@
                 <constraint firstItem="ON4-tr-4EC" firstAttribute="top" secondItem="QT5-17-Yud" secondAttribute="bottom" id="4g8-cK-zyt"/>
                 <constraint firstItem="QT5-17-Yud" firstAttribute="top" secondItem="Bqr-6A-7Qw" secondAttribute="bottom" id="94H-Eq-Xcb"/>
                 <constraint firstItem="ON4-tr-4EC" firstAttribute="leading" secondItem="QT5-17-Yud" secondAttribute="leading" id="FOH-1S-NfH"/>
+                <constraint firstItem="hXc-Ed-efD" firstAttribute="bottom" secondItem="Bqr-6A-7Qw" secondAttribute="bottom" constant="-5" id="HlP-0z-bvM"/>
                 <constraint firstItem="Nii-uG-stU" firstAttribute="leading" secondItem="ON4-tr-4EC" secondAttribute="leading" id="IN6-Pc-wsQ"/>
+                <constraint firstItem="hXc-Ed-efD" firstAttribute="trailing" secondItem="Bqr-6A-7Qw" secondAttribute="trailing" constant="-5" id="aop-ck-g59"/>
                 <constraint firstItem="Bqr-6A-7Qw" firstAttribute="top" secondItem="Tmc-3E-Ven" secondAttribute="top" id="cJ5-E5-y46"/>
                 <constraint firstItem="Nii-uG-stU" firstAttribute="top" secondItem="ON4-tr-4EC" secondAttribute="bottom" id="dIX-yd-ORM"/>
                 <constraint firstAttribute="trailing" secondItem="Bqr-6A-7Qw" secondAttribute="trailing" id="dUe-1z-omS"/>
