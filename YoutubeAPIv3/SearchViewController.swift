@@ -179,26 +179,15 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         againSearch = false
-        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
-        
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VideoCollectionCell
         if recordSearchSettings.type != "video" {
-            playViewController.type = "playlist"
-            playViewController.ID = details["playlistID"] as! String
+            CommonFunction.callPlayViewController( self, details:details, type:"playlist", cell:cell )
         }else {
-            playViewController.type = "video"
-            playViewController.ID = details["videoID"] as! String
-            
+            CommonFunction.callPlayViewController( self, details:details, type:"video", cell:cell )            
         }
         
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        view.window!.layer.addAnimation(transition, forKey: kCATransition)
-        presentViewController(playViewController, animated: false, completion: nil)
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {
@@ -388,6 +377,10 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                         let contentDetailsDict = firstItemDict["contentDetails"] as! Dictionary<NSObject, AnyObject>
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
+                        if firstItemDict["statistics"] != nil {
+                            videoDetailsDict["likeCount"] = firstItemDict["statistics"]!["likeCount"]
+                            videoDetailsDict["dislikeCount"] = firstItemDict["statistics"]!["dislikeCount"]
+                        }
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["medium"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict[count] = (firstItemDict[part] as! Dictionary<NSObject, AnyObject>)[count]
                         

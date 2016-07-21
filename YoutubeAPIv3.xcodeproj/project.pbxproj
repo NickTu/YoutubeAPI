@@ -18,6 +18,8 @@
 		AB1EA9A41D37D17B00A41307 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */; };
 		AB1EA9A61D380FA800A41307 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1EA9A51D380FA800A41307 /* CommonFunction.swift */; };
 		AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6100911D09A2DD00AB102D /* PlayViewController.swift */; };
+		AB740FEA1D40F3790000F56A /* PlayTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB740FE91D40F3790000F56A /* PlayTableViewHeader.swift */; };
+		AB740FEC1D40F3830000F56A /* PlayTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB740FEB1D40F3830000F56A /* PlayTableViewHeader.xib */; };
 		AB7E9BC81D27533E00439BD4 /* CAPSPageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */; };
 		AB7E9BCA1D27536500439BD4 /* MainLiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */; };
 		AB7E9BCC1D27541A00439BD4 /* LiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */; };
@@ -48,6 +50,8 @@
 		AB1EA9A31D37D17B00A41307 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		AB1EA9A51D380FA800A41307 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonFunction.swift; sourceTree = "<group>"; };
 		AB6100911D09A2DD00AB102D /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		AB740FE91D40F3790000F56A /* PlayTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayTableViewHeader.swift; sourceTree = "<group>"; };
+		AB740FEB1D40F3830000F56A /* PlayTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayTableViewHeader.xib; sourceTree = "<group>"; };
 		AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAPSPageMenu.swift; sourceTree = "<group>"; };
 		AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLiveViewController.swift; sourceTree = "<group>"; };
 		AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveViewController.xib; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 				ABA628A31CFC7F7D001DC12F /* VideoCollectionCellXib.xib */,
 				AB1EA99B1D323D0700A41307 /* relatedToVideoTableViewCell.swift */,
 				AB1EA99D1D323D2E00A41307 /* relatedToVideoTableViewCell.xib */,
+				AB740FE91D40F3790000F56A /* PlayTableViewHeader.swift */,
+				AB740FEB1D40F3830000F56A /* PlayTableViewHeader.xib */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -223,6 +229,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB740FEC1D40F3830000F56A /* PlayTableViewHeader.xib in Resources */,
 				AB1EA99E1D323D2E00A41307 /* relatedToVideoTableViewCell.xib in Resources */,
 				ABA628951CFC7F39001DC12F /* LaunchScreen.storyboard in Resources */,
 				AB1C15CA1D3C108000CFEBD6 /* RegionTableViewHeader.xib in Resources */,
@@ -290,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB6100921D09A2DD00AB102D /* PlayViewController.swift in Sources */,
+				AB740FEA1D40F3790000F56A /* PlayTableViewHeader.swift in Sources */,
 				ABA628891CFC7F39001DC12F /* AppDelegate.swift in Sources */,
 				AB1EA9A41D37D17B00A41307 /* MainTabBarController.swift in Sources */,
 				AB1C15C61D3A688100CFEBD6 /* RegionTableViewCell.swift in Sources */,

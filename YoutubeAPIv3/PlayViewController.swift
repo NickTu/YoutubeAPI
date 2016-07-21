@@ -36,6 +36,11 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
     var keyVideoId:Array<String> = []
     var searchSuccessCount = 0
     var parater:Dictionary<String,Int> = [:]
+    var videoTitle: String!
+    var likeNumber: String!
+    var unlikeNumber: String!
+    var count: String!
+    var headHeight:CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +55,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
             navigationBar.topItem?.title = "play"
         } else if type == "playlist" {
             navigationBar.topItem?.title = "playlist"
+        }
+        
+        if likeNumber == "0" && unlikeNumber == "0" {
+            headHeight = 72
+        }else {
+            headHeight = 109
         }
 
     }
@@ -132,6 +143,42 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
             self.isScrollSearch = true
             search()
         }
+        
+        let sectionHeaderHeight = CGFloat(40);
+        if scrollView.contentOffset.y <= sectionHeaderHeight && scrollView.contentOffset.y >= 0 {
+            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+        } else if (scrollView.contentOffset.y >= sectionHeaderHeight) {
+            scrollView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let playTableViewHeader = PlayTableViewHeader(frame: CGRectMake(0,0,headHeight,tableView.frame.width) )
+        playTableViewHeader.title.text = self.videoTitle
+        playTableViewHeader.viewCount.text = self.count
+        
+        if likeNumber == "0" && unlikeNumber == "0" {
+            playTableViewHeader.likeImageView.hidden = true
+            playTableViewHeader.unlikeImageView.hidden = true
+            playTableViewHeader.likeNumber.hidden = true
+            playTableViewHeader.unlikeNumber.hidden = true
+        } else {
+            playTableViewHeader.likeNumber.text = likeNumber
+            playTableViewHeader.unlikeNumber.text = unlikeNumber
+        }
+        
+        
+        
+        return playTableViewHeader
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return headHeight
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -314,7 +361,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
                             self.endSearch()
                         }
                     }else {
-                        print("items.count = \(items.count)")
+                        //print("items.count = \(items.count)")
                         self.tableView.reloadData()
                     }
                     

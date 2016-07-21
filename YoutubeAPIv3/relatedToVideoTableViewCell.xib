@@ -45,8 +45,8 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Mh-5X-sVg">
-                        <rect key="frame" x="72" y="77" width="27" height="12"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Mh-5X-sVg">
+                        <rect key="frame" x="79" y="76" width="27" height="12"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -57,6 +57,7 @@
                     <constraint firstItem="Yj5-v3-UF9" firstAttribute="leading" secondItem="23O-8s-phT" secondAttribute="leading" constant="5" id="16n-d9-8YX"/>
                     <constraint firstItem="VkQ-np-sjn" firstAttribute="top" secondItem="M7y-kO-WnR" secondAttribute="bottom" constant="5" id="4f5-hN-dNA"/>
                     <constraint firstItem="Yj5-v3-UF9" firstAttribute="width" secondItem="23O-8s-phT" secondAttribute="width" multiplier="0.33" id="GBg-hZ-HFi"/>
+                    <constraint firstItem="7Mh-5X-sVg" firstAttribute="trailing" secondItem="Yj5-v3-UF9" secondAttribute="trailing" constant="-5" id="HxN-sk-zbA"/>
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="leading" secondItem="VkQ-np-sjn" secondAttribute="leading" id="JS7-0R-xPU"/>
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="top" secondItem="VkQ-np-sjn" secondAttribute="bottom" constant="5" id="QdA-Vo-m5g"/>
                     <constraint firstItem="VkQ-np-sjn" firstAttribute="leading" secondItem="M7y-kO-WnR" secondAttribute="leading" id="QrD-Hc-9D2"/>
@@ -68,6 +69,7 @@
                     <constraint firstAttribute="bottom" secondItem="Yj5-v3-UF9" secondAttribute="bottom" constant="5" id="qHY-d5-bCf"/>
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="width" secondItem="23O-8s-phT" secondAttribute="width" multiplier="0.67" id="tdF-RN-oaN"/>
                     <constraint firstItem="Yj5-v3-UF9" firstAttribute="height" secondItem="23O-8s-phT" secondAttribute="height" constant="-10" id="vtZ-SX-vFO"/>
+                    <constraint firstItem="7Mh-5X-sVg" firstAttribute="bottom" secondItem="Yj5-v3-UF9" secondAttribute="bottom" constant="-5" id="yCF-ZJ-lKl"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

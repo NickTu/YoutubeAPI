@@ -131,19 +131,9 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
-        playViewController.type = "video"
-        playViewController.ID = details["videoID"] as! String
-        
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        view.window!.layer.addAnimation(transition, forKey: kCATransition)
-        presentViewController(playViewController, animated: false, completion: nil)
-        
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VideoCollectionCell
+        CommonFunction.callPlayViewController( self, details:details, type:"video", cell:cell )
     }
     
     func getNumberOfDaysInMonth(date: NSDate ) -> NSInteger {

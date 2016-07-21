@@ -111,18 +111,10 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
         let details = collectionDataArray[indexPath.row]
-        playViewController.type = "video"
-        playViewController.ID = details["videoID"] as! String
-        
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        view.window!.layer.addAnimation(transition, forKey: kCATransition)
-        presentViewController(playViewController, animated: false, completion: nil)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VideoCollectionCell
+        print("cell.viewCount.text = " + cell.viewCount.text!)
+        CommonFunction.callPlayViewController( self, details:details, type:"video", cell:cell )
         
     }
     
@@ -208,6 +200,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["channelTitle"] = snippetDict["channelTitle"]
                         videoDetailsDict["viewCount"] = items[i]["statistics"]!["viewCount"]
+                        videoDetailsDict["likeCount"] = items[i]["statistics"]!["likeCount"]
+                        videoDetailsDict["dislikeCount"] = items[i]["statistics"]!["dislikeCount"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["medium"] as! Dictionary<NSObject, AnyObject>)["url"]
                         videoDetailsDict["videoID"] = items[i]["id"] as! String
                         videoDetailsDict["duration"] = contentDetailsDict["duration"] as! String

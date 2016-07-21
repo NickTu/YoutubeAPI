@@ -27,6 +27,41 @@ extension String {
 
 class CommonFunction {
     
+    static func callPlayViewController( viewController:UIViewController, details:Dictionary<NSObject, AnyObject>, type:String, cell:VideoCollectionCell) {
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let playViewController = storyBoard.instantiateViewControllerWithIdentifier("PlayViewController") as! PlayViewController
+        
+        if type == "video" {
+            playViewController.type = "video"
+            playViewController.ID = details["videoID"] as! String
+        }else {
+            playViewController.type = "playlist"
+            playViewController.ID = details["playlistID"] as! String
+        }
+        playViewController.videoTitle = details["title"] as! String
+        playViewController.count = cell.viewCount.text
+        
+        if details["likeCount"] == nil {
+            playViewController.likeNumber = "0"
+        } else {
+            playViewController.likeNumber = details["likeCount"] as! String
+        }
+        if details["dislikeCount"] == nil {
+            playViewController.unlikeNumber = "0"
+        } else {
+            playViewController.unlikeNumber = details["dislikeCount"] as! String
+        }
+        
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        viewController.view.window!.layer.addAnimation(transition, forKey: kCATransition)
+        viewController.presentViewController(playViewController, animated: false, completion: nil)
+        
+    }
+    
     static func adjustCollectionViewCellSize(cell:VideoCollectionCell,type:String){
         
         if type == "channel" {
@@ -48,11 +83,7 @@ class CommonFunction {
         thumbnail.contentMode = .ScaleToFill
         title.textAlignment = .Left
         channelTitle.textAlignment = .Left
-        videoLength.adjustsFontSizeToFitWidth = true
-        videoLength.layer.borderColor = UIColor.blackColor().CGColor
-        videoLength.layer.borderWidth = 1.0
-        videoLength.backgroundColor = UIColor.blackColor()
-        videoLength.textColor = UIColor.whiteColor()
+        
         
         title.sizeToFit()
         channelTitle.sizeToFit()
@@ -73,8 +104,17 @@ class CommonFunction {
             channelTitle.text = details["channelTitle"] as? String
         }
         if details["duration"] == nil {
+            
             videoLength.text = ""
+            videoLength.backgroundColor = UIColor.clearColor()
+            
         }else {
+            
+            videoLength.adjustsFontSizeToFitWidth = true
+            videoLength.layer.borderColor = UIColor.blackColor().CGColor
+            videoLength.layer.borderWidth = 1.0
+            videoLength.backgroundColor = UIColor.blackColor()
+            videoLength.textColor = UIColor.whiteColor()
             
             var patternString = details["duration"] as? String
             patternString = (patternString! as NSString).substringFromIndex(2)
