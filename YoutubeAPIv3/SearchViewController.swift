@@ -205,6 +205,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         var urlStringVideoDurationDimensionDefinition:String!
         var urlStringUploadTime:String! = ""
         var urlStringPageToken:String!
+        
         self.successCount = 0
         self.searchSuccessCount = 0
         if recordSearchSettings.videoType == "All" {

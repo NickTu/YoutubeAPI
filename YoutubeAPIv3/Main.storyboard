@@ -25,7 +25,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cuE-t2-eML">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Search" id="OM4-ru-OiJ">
+                                    <navigationItem title="搜尋" id="OM4-ru-OiJ">
                                         <barButtonItem key="leftBarButtonItem" image="playlist" id="Mad-ib-6rz">
                                             <connections>
                                                 <action selector="settingsVideoCategories:" destination="9pv-A4-QxB" id="dUx-Bd-43t"/>
@@ -46,7 +46,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="51" id="6yR-dj-sII"/>
                                 </constraints>
-                                <state key="normal" title="Cancel"/>
+                                <state key="normal" title="取消"/>
                                 <connections>
                                     <action selector="cancelSearch:" destination="9pv-A4-QxB" eventType="touchUpInside" id="TeB-KT-fLR"/>
                                 </connections>
@@ -122,8 +122,8 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t67-AY-lKc">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="VideoCategories" id="wpR-BU-iyE">
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="AId-5k-hNx">
+                                    <navigationItem title="影片分類" id="wpR-BU-iyE">
+                                        <barButtonItem key="rightBarButtonItem" title="完成" id="AId-5k-hNx">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="zln-6A-wIK" id="GPj-J2-Z5N"/>
                                             </connections>
@@ -182,8 +182,8 @@
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="0.95686274510000002" green="0.15416343060000001" blue="0.14380779439999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
-                                    <navigationItem title="CountryRegion" id="raD-KO-8WY">
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="IeK-Yw-pE3">
+                                    <navigationItem title="國家區域" id="raD-KO-8WY">
+                                        <barButtonItem key="rightBarButtonItem" title="完成" id="IeK-Yw-pE3">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="0TW-RT-Yej" id="Gv0-UW-BYL"/>
                                             </connections>
@@ -234,7 +234,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EkM-vp-7vm">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Live" id="R8O-Cw-dIO"/>
+                                    <navigationItem title="直播" id="R8O-Cw-dIO"/>
                                 </items>
                             </navigationBar>
                         </subviews>
@@ -287,7 +287,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Igp-h3-d4q">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Home" id="rws-Bj-Uyl"/>
+                                    <navigationItem title="發燒影片" id="rws-Bj-Uyl"/>
                                 </items>
                             </navigationBar>
                         </subviews>
@@ -330,8 +330,8 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <navigationItem title="SaerchSettings" id="Ay2-AD-7XO">
-                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="2I9-iO-QeL">
+                                    <navigationItem title="搜尋設定" id="Ay2-AD-7XO">
+                                        <barButtonItem key="rightBarButtonItem" title="完成" style="plain" id="2I9-iO-QeL">
                                             <connections>
                                                 <action selector="finishSearchSettings:" destination="dHo-88-ZkT" id="Msh-k5-VQf"/>
                                             </connections>
@@ -388,7 +388,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UYW-KC-1bu">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Play" id="b2X-jy-rTz">
+                                    <navigationItem title="影片" id="b2X-jy-rTz">
                                         <barButtonItem key="leftBarButtonItem" image="back" id="h1H-2e-Guv">
                                             <connections>
                                                 <action selector="backViewController:" destination="W7s-P3-CSf" id="oLy-eB-3wV"/>
