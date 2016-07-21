@@ -15,6 +15,13 @@ class relatedToVideoTableViewCell: UITableViewCell {
     @IBOutlet weak var viewCount: UILabel!
     @IBOutlet weak var channelTitle: UILabel!
     @IBOutlet weak var videoLength: UILabel!
+    @IBOutlet weak var titleTop: NSLayoutConstraint!
+    
+    @IBOutlet weak var viewCountButtom: NSLayoutConstraint!
+    @IBOutlet weak var viewCountTop: NSLayoutConstraint!
+    @IBOutlet weak var channelTitleTop: NSLayoutConstraint!
+    @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!
+    @IBOutlet weak var titleHeight: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -46,6 +46,12 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         tableView.dataSource = self
         tableView.separatorStyle = .None
         tableView.registerNib(UINib(nibName: "relatedToVideoTableViewCell",bundle: nil), forCellReuseIdentifier: "idRelatedToVideoTableViewCell")
+        if type == "video" {
+            navigationBar.topItem?.title = "play"
+        } else if type == "playlist" {
+            navigationBar.topItem?.title = "playlist"
+        }
+
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -58,10 +64,8 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
          */
         parater = ["playsinline":1]
         if type == "video" {
-            navigationBar.topItem?.title = "play"
             playerView.loadWithVideoId(ID,playerVars: parater)
         } else if type == "playlist" {
-            navigationBar.topItem?.title = "playlist"
             playerView.loadWithPlaylistId(ID, playerVars: parater)
         } else {
             playerView = nil
@@ -171,18 +175,17 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
         
         if details["viewCount"] == nil {
-            viewCount.text = "No viewCount"
+            viewCount.text = "0 viewCount"
         } else {
-            viewCount.text = "viewCount = " + (details["viewCount"] as? String)!
+            viewCount.text = (details["viewCount"] as? String)! + " viewCount"
         }
         viewCount.textAlignment = .Left
 
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)        
         
-        let height = tableView.frame.size.height/12
-        title.frame.size = CGSizeMake(cell.frame.size.width, height)
-        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
-        viewCount.frame.size = CGSizeMake(cell.frame.size.width, height)
+        let height = ( cell.frame.size.height - cell.titleTop.constant - cell.channelTitleTop.constant - cell.viewCountTop.constant - cell.viewCountButtom.constant )/4
+        cell.titleHeight.constant = height*2
+        cell.channelTitleHeight.constant = height
         
         return cell
     }

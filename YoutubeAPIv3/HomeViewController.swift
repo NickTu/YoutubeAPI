@@ -147,12 +147,8 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
             viewCount.text = (details["viewCount"] as? String)! + " viewCount"
         }
         
+        CommonFunction.adjustCollectionViewCellSize(cell,type: "video")
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
-        
-        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
-        title.frame.size = CGSizeMake(cell.frame.size.width, height)
-        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
-        viewCount.frame.size = CGSizeMake(cell.frame.size.width, height)
 
         return cell
     }

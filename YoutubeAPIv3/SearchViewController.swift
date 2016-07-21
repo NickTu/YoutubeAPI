@@ -163,24 +163,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             
         }
         
+        CommonFunction.adjustCollectionViewCellSize(cell,type: recordSearchSettings.type)
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
-        
-        if recordSearchSettings.type == "channel" {
-            
-            let height = (cell.frame.size.height - thumbnail.frame.size.height)/2
-            cell.titleHeight.constant = height
-            cell.channelTitleHeight.constant = 0
-            cell.viewCountHeight.constant = height
-
-        } else {
-            
-            let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
-            cell.titleHeight.constant = height
-            cell.channelTitleHeight.constant = height
-            cell.viewCountHeight.constant = height
-            
-        }
-
         
         return cell
     }

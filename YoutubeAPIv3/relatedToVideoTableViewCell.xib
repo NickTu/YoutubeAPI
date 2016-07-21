@@ -19,22 +19,28 @@
                         <rect key="frame" x="5" y="5" width="106" height="88"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="channelTitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkQ-np-sjn">
-                        <rect key="frame" x="116" y="35" width="215" height="25"/>
+                        <rect key="frame" x="116" y="48" width="215" height="19"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="19" id="wGu-DO-NQb"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="viewCount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZk-tO-WjM">
-                        <rect key="frame" x="116" y="65" width="215" height="25"/>
+                        <rect key="frame" x="116" y="72" width="215" height="21"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M7y-kO-WnR">
-                        <rect key="frame" x="116" y="5" width="215" height="25"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M7y-kO-WnR">
+                        <rect key="frame" x="116" y="5" width="215" height="38"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="38" id="sgU-6M-jRk"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -54,12 +60,10 @@
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="leading" secondItem="VkQ-np-sjn" secondAttribute="leading" id="JS7-0R-xPU"/>
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="top" secondItem="VkQ-np-sjn" secondAttribute="bottom" constant="5" id="QdA-Vo-m5g"/>
                     <constraint firstItem="VkQ-np-sjn" firstAttribute="leading" secondItem="M7y-kO-WnR" secondAttribute="leading" id="QrD-Hc-9D2"/>
-                    <constraint firstItem="M7y-kO-WnR" firstAttribute="height" secondItem="23O-8s-phT" secondAttribute="height" multiplier="0.25" id="UAK-pV-8tB"/>
                     <constraint firstItem="M7y-kO-WnR" firstAttribute="top" secondItem="23O-8s-phT" secondAttribute="top" constant="5" id="Vw3-V3-TI0"/>
-                    <constraint firstItem="VkQ-np-sjn" firstAttribute="height" secondItem="23O-8s-phT" secondAttribute="height" multiplier="0.25" id="bXq-sr-k0F"/>
                     <constraint firstItem="M7y-kO-WnR" firstAttribute="leading" secondItem="Yj5-v3-UF9" secondAttribute="trailing" constant="5" id="bZq-M6-8fx"/>
                     <constraint firstItem="Yj5-v3-UF9" firstAttribute="top" secondItem="23O-8s-phT" secondAttribute="top" constant="5" id="c3s-Yp-QLk"/>
-                    <constraint firstItem="AZk-tO-WjM" firstAttribute="height" secondItem="23O-8s-phT" secondAttribute="height" multiplier="0.25" id="hsf-iW-3sR"/>
+                    <constraint firstAttribute="bottom" secondItem="AZk-tO-WjM" secondAttribute="bottom" constant="5" id="ci6-Hr-z3w"/>
                     <constraint firstItem="VkQ-np-sjn" firstAttribute="width" secondItem="23O-8s-phT" secondAttribute="width" multiplier="0.67" id="pKi-c1-rfS"/>
                     <constraint firstAttribute="bottom" secondItem="Yj5-v3-UF9" secondAttribute="bottom" constant="5" id="qHY-d5-bCf"/>
                     <constraint firstItem="AZk-tO-WjM" firstAttribute="width" secondItem="23O-8s-phT" secondAttribute="width" multiplier="0.67" id="tdF-RN-oaN"/>
@@ -68,10 +72,16 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="channelTitle" destination="VkQ-np-sjn" id="pI9-gO-KQU"/>
+                <outlet property="channelTitleHeight" destination="wGu-DO-NQb" id="fwW-PQ-qSP"/>
+                <outlet property="channelTitleTop" destination="4f5-hN-dNA" id="4b4-de-OQT"/>
                 <outlet property="thumbnail" destination="Yj5-v3-UF9" id="tvx-k6-zDc"/>
                 <outlet property="title" destination="M7y-kO-WnR" id="Rnu-HN-UoS"/>
+                <outlet property="titleHeight" destination="sgU-6M-jRk" id="EAQ-GX-eNT"/>
+                <outlet property="titleTop" destination="Vw3-V3-TI0" id="ujQ-EV-K4w"/>
                 <outlet property="videoLength" destination="7Mh-5X-sVg" id="UKU-xt-viO"/>
                 <outlet property="viewCount" destination="AZk-tO-WjM" id="L0J-bA-KO8"/>
+                <outlet property="viewCountButtom" destination="ci6-Hr-z3w" id="3SP-SN-gFI"/>
+                <outlet property="viewCountTop" destination="QdA-Vo-m5g" id="vrt-8h-uIf"/>
             </connections>
             <point key="canvasLocation" x="14" y="195"/>
         </tableViewCell>

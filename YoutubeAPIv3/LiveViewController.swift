@@ -115,12 +115,8 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         }
         count.textAlignment = .Left
         
+        CommonFunction.adjustCollectionViewCellSize(cell,type: "video")
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)
-        
-        let height = (cell.frame.size.height - thumbnail.frame.size.height)/3
-        title.frame.size = CGSizeMake(cell.frame.size.width, height)
-        channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height)
-        count.frame.size = CGSizeMake(cell.frame.size.width, height)
         
         return cell
     }
@@ -130,7 +126,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {        
-        return CGSizeMake(collectionView.frame.width/2-10, common.liveViewHeight/3)
+        return CGSizeMake(collectionView.frame.width/2-10, common.liveViewHeight/3-5)
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

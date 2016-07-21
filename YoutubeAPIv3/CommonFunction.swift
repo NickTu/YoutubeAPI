@@ -27,6 +27,22 @@ extension String {
 
 class CommonFunction {
     
+    static func adjustCollectionViewCellSize(cell:VideoCollectionCell,type:String){
+        
+        if type == "channel" {
+            let height = ( cell.frame.size.height - cell.thumbnail.frame.height )/3
+            cell.titleHeight.constant = height*2
+            cell.channelTitleHeight.constant = 0
+            cell.viewCountHeight.constant = height
+        } else {
+            let height = ( cell.frame.size.height - cell.thumbnail.frame.height )/4
+            cell.title.frame.size = CGSizeMake(cell.frame.size.width, height*2)
+            cell.channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height*2)
+            cell.viewCount.frame.size = CGSizeMake(cell.frame.size.width, height*2)
+        }
+        
+    }
+    
     static func showCellData(title:UILabel,channelTitle:UILabel,thumbnail:UIImageView,videoLength:UILabel, details:Dictionary<NSObject, AnyObject>){
         
         thumbnail.contentMode = .ScaleToFill

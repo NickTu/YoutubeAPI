@@ -389,7 +389,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="Play" id="b2X-jy-rTz">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="reply" id="h1H-2e-Guv">
+                                        <barButtonItem key="leftBarButtonItem" image="back" id="h1H-2e-Guv">
                                             <connections>
                                                 <action selector="backViewController:" destination="W7s-P3-CSf" id="oLy-eB-3wV"/>
                                             </connections>
@@ -458,6 +458,7 @@
     </scenes>
     <resources>
         <image name="Home" width="32" height="32"/>
+        <image name="back" width="22" height="22"/>
         <image name="live" width="32" height="32"/>
         <image name="playlist" width="32" height="32"/>
         <image name="search" width="32" height="32"/>
