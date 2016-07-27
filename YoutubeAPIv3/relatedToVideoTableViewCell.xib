@@ -8,7 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idRelatedToVideoTableViewCell" rowHeight="97" id="Nh0-cE-UdY" customClass="relatedToVideoTableViewCell" customModule="YoutubeAPIv3" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idRelatedToVideoTableViewCell" rowHeight="97" id="Nh0-cE-UdY" customClass="relatedToVideoTableViewCell" customModule="Youtube_影片" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="321" height="99"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nh0-cE-UdY" id="23O-8s-phT">

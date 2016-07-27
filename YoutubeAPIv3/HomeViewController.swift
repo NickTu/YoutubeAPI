@@ -134,9 +134,9 @@ class HomeViewController: UIViewController,UICollectionViewDelegate,UICollection
         viewCount.sizeToFit()
         viewCount.textAlignment = .Left
         if details["viewCount"] == nil {
-            viewCount.text = "0 viewCount"
+            viewCount.text = "0 次觀看"
         } else {
-            viewCount.text = (details["viewCount"] as? String)! + " viewCount"
+            viewCount.text = (details["viewCount"] as? String)! + " 次觀看"
         }
         
         CommonFunction.adjustCollectionViewCellSize(cell,type: "video")

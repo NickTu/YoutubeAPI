@@ -94,7 +94,6 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         }
     }
     
-    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionDataArray.count
     }
@@ -109,9 +108,9 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
         let details = collectionDataArray[keyVideoId[indexPath.row]]!
         
         if details["concurrentViewers"] == nil {
-            count.text = "0 conViewers"
+            count.text = "0 個同步觀看"
         } else {
-            count.text = (details["concurrentViewers"] as? String)! + " conViewers"
+            count.text = (details["concurrentViewers"] as? String)! + " 個同步觀看"
         }
         count.textAlignment = .Left
         
@@ -126,7 +125,7 @@ class LiveViewController: UIViewController,UISearchBarDelegate,UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {        
-        return CGSizeMake(collectionView.frame.width/2-10, common.liveViewHeight/3-5)
+        return CGSizeMake(collectionView.frame.width/2-10, common.liveViewHeight/3)
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

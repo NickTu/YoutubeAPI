@@ -144,7 +144,7 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
             search()
         }
         
-        let sectionHeaderHeight = CGFloat(40);
+        let sectionHeaderHeight = CGFloat(headHeight);
         if scrollView.contentOffset.y <= sectionHeaderHeight && scrollView.contentOffset.y >= 0 {
             scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
         } else if (scrollView.contentOffset.y >= sectionHeaderHeight) {
@@ -222,17 +222,24 @@ class PlayViewController: UIViewController,YTPlayerViewDelegate,UITableViewDeleg
         let details = tableViewDataArray[ keyVideoId[indexPath.row] ]!
         
         if details["viewCount"] == nil {
-            viewCount.text = "0 viewCount"
+            viewCount.text = "0次觀看"
         } else {
-            viewCount.text = (details["viewCount"] as? String)! + " viewCount"
+            viewCount.text = (details["viewCount"] as? String)! + "次觀看"
         }
         viewCount.textAlignment = .Left
+        viewCount.sizeToFit()
 
+        /*let height = ( cell.frame.size.height - cell.titleTop.constant - cell.channelTitleTop.constant - cell.viewCountTop.constant - cell.viewCountButtom.constant )/4
+        cell.titleHeight.constant = height*2
+        cell.channelTitleHeight.constant = height*/
+        cell.titleHeight.constant = tableView.frame.size.height/12-5
+        cell.channelTitleHeight.constant = tableView.frame.size.height/12-5
+        
         CommonFunction.showCellData(title,channelTitle: channelTitle,thumbnail: thumbnail,videoLength: videoLength,details: details)        
         
-        let height = ( cell.frame.size.height - cell.titleTop.constant - cell.channelTitleTop.constant - cell.viewCountTop.constant - cell.viewCountButtom.constant )/4
+        /*let height = ( cell.frame.size.height - cell.titleTop.constant - cell.channelTitleTop.constant - cell.viewCountTop.constant - cell.viewCountButtom.constant )/4
         cell.titleHeight.constant = height*2
-        cell.channelTitleHeight.constant = height
+        cell.channelTitleHeight.constant = height*/
         
         return cell
     }

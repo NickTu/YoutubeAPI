@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayTableViewHeader" customModule="YoutubeAPIv3" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayTableViewHeader" customModule="Youtube_影片" customModuleProvider="target">
             <connections>
                 <outlet property="likeImageView" destination="PKZ-a3-RaV" id="YiN-TB-Baw"/>
                 <outlet property="likeNumber" destination="MS0-OY-qRe" id="6yD-kW-sXh"/>

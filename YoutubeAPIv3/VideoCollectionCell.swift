@@ -17,11 +17,11 @@ class VideoCollectionCell: UICollectionViewCell {
     @IBOutlet weak var viewCount: UILabel!
     @IBOutlet weak var videoLength: UILabel!
     @IBOutlet weak var titleHeight: NSLayoutConstraint!
-    @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!
-    @IBOutlet weak var viewCountHeight: NSLayoutConstraint!
-    
+    @IBOutlet weak var channelTitleHeight: NSLayoutConstraint!    
+    @IBOutlet weak var thumbnailHeight: NSLayoutConstraint!
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.contentView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
     }
     
 }

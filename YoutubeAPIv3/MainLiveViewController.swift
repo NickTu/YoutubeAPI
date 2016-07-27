@@ -62,8 +62,7 @@ class MainLiveViewController: UIViewController {
             self.liveView.addSubview(pageMenu!.view)
         
             pageMenu!.didMoveToParentViewController(self)
-        }
-        
+        }        
         
     }
     
@@ -75,7 +74,6 @@ class MainLiveViewController: UIViewController {
         button.frame = CGRectMake(0, 0, 30, 30)
         let barButton = UIBarButtonItem(customView: button)
         item.rightBarButtonItem = barButton
-        
         
     }
     

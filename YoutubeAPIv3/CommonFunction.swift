@@ -68,12 +68,15 @@ class CommonFunction {
             let height = ( cell.frame.size.height - cell.thumbnail.frame.height )/3
             cell.titleHeight.constant = height*2
             cell.channelTitleHeight.constant = 0
-            cell.viewCountHeight.constant = height
+            //cell.viewCountHeight.constant = height
         } else {
-            let height = ( cell.frame.size.height - cell.thumbnail.frame.height )/4
-            cell.title.frame.size = CGSizeMake(cell.frame.size.width, height*2)
+            cell.thumbnailHeight.constant = cell.frame.size.height/2
+            let height = cell.frame.size.height/8
+            /*cell.title.frame.size = CGSizeMake(cell.frame.size.width, height*2)
             cell.channelTitle.frame.size = CGSizeMake(cell.frame.size.width, height*2)
-            cell.viewCount.frame.size = CGSizeMake(cell.frame.size.width, height*2)
+            cell.viewCount.frame.size = CGSizeMake(cell.frame.size.width, height*2)*/
+            cell.titleHeight.constant = height*2
+            cell.channelTitleHeight.constant = height
         }
         
     }

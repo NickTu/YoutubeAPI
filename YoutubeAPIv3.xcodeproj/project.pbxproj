@@ -55,7 +55,7 @@
 		AB7E9BC71D27533E00439BD4 /* CAPSPageMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAPSPageMenu.swift; sourceTree = "<group>"; };
 		AB7E9BC91D27536500439BD4 /* MainLiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainLiveViewController.swift; sourceTree = "<group>"; };
 		AB7E9BCB1D27541A00439BD4 /* LiveViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveViewController.xib; sourceTree = "<group>"; };
-		ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeAPIv3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABA628851CFC7F39001DC12F /* Youtube 影片.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Youtube 影片.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA628881CFC7F39001DC12F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ABA628941CFC7F39001DC12F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ABA628961CFC7F39001DC12F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,7 +140,7 @@
 		ABA628861CFC7F39001DC12F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */,
+				ABA628851CFC7F39001DC12F /* Youtube 影片.app */,
 			);
 			name = Products;
 			path = ..;
@@ -188,7 +188,7 @@
 			);
 			name = YoutubeAPIv3;
 			productName = YoutubeAPIv3;
-			productReference = ABA628851CFC7F39001DC12F /* YoutubeAPIv3.app */;
+			productReference = ABA628851CFC7F39001DC12F /* Youtube 影片.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -203,6 +203,7 @@
 				TargetAttributes = {
 					ABA628841CFC7F39001DC12F = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = YC3RBD7YK6;
 					};
 				};
 			};
@@ -418,10 +419,14 @@
 			baseConfigurationReference = 1184EAE8DF552CDDEE991422 /* Pods-YoutubeAPIv3.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = YoutubeAPIv3/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twenty20.hello.YoutubeAPIv3;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Youtube 影片";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fb923039-c79b-490c-be36-2f9a79637c33";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/werty2459/Documents/swift/TestYouTubeAPI/Pods/youtube-ios-player-helper/Classes/YTPlayerView.h";
 			};
 			name = Debug;
@@ -431,10 +436,14 @@
 			baseConfigurationReference = EB7E92DB6CB83DA93ED4DE51 /* Pods-YoutubeAPIv3.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = YoutubeAPIv3/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twenty20.hello.YoutubeAPIv3;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Youtube 影片";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fb923039-c79b-490c-be36-2f9a79637c33";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/werty2459/Documents/swift/TestYouTubeAPI/Pods/youtube-ios-player-helper/Classes/YTPlayerView.h";
 			};
 			name = Release;

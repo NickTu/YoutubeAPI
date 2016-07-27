@@ -24,9 +24,9 @@ struct common {
 }
 
 struct countryRegion {
-    static var regionCode:String! = "US"
-    static var section:Int! = 3
-    static var row:Int! = 0
+    static var regionCode:String! = "TW"
+    static var section:Int! = 0
+    static var row:Int! = 23
 }
 
 @UIApplicationMain

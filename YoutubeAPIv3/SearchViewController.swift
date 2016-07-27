@@ -71,7 +71,6 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             NSThread.mainThread().cancel()
         }
     }
-
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -150,15 +149,15 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         count.textAlignment = .Left
         if recordSearchSettings.type == "playlist" {
             if details["itemCount"] == nil {
-                count.text = "0 itemCount"
+                count.text = "0 個項目"
             } else {
-                count.text = String(details["itemCount"]!) + " itemCount"
+                count.text = String(details["itemCount"]!) + " 個項目"
             }
         }else {
             if details["viewCount"] == nil {
-                count.text = "0 viewCount"
+                count.text = "0 次觀看"
             } else {
-                count.text = (details["viewCount"] as? String)! +  " viewCount"
+                count.text = (details["viewCount"] as? String)! +  " 次觀看"
             }
             
         }
